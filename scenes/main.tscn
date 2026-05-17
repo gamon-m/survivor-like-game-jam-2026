@@ -18,3 +18,5 @@ region_enabled = true
 region_rect = Rect2(0, 0, 4000, 4000)
 
 [node name="Player" parent="." unique_id=403663915 instance=ExtResource("1_o5qli")]
+
+[node name="EnemiesContainer" type="Node2D" parent="." unique_id=1865259369]

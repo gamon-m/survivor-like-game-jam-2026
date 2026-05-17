@@ -2,6 +2,10 @@
 
 [ext_resource type="Texture2D" uid="uid://dkw3rwkfwomd" path="res://assets/characters/friendly/player-sheet.png" id="1_3vyb7"]
 [ext_resource type="Script" uid="uid://ccs475ppoe4vb" path="res://scenes/player.gd" id="1_g2els"]
+[ext_resource type="Script" uid="uid://ybcq8jsdiyum" path="res://scenes/enemy_spawner.gd" id="3_qhqgy"]
+[ext_resource type="PackedScene" uid="uid://t6ibr3w4866r" path="res://scenes/enemies/chaser_enemy.tscn" id="4_tuyoq"]
+[ext_resource type="PackedScene" uid="uid://c2n1wqqbd8fvc" path="res://scenes/enemies/swarmer_enemy.tscn" id="5_fjrip"]
+[ext_resource type="PackedScene" uid="uid://jfbv72tdkpga" path="res://scenes/enemies/tank_enemy.tscn" id="6_smehm"]
 
 [sub_resource type="Animation" id="Animation_g2els"]
 length = 0.001
@@ -93,8 +97,17 @@ position_smoothing_enabled = true
 position_smoothing_speed = 20.0
 
 [node name="EnemySpawner" type="Node2D" parent="." unique_id=159729331]
+script = ExtResource("3_qhqgy")
+enemy_scenes = Array[PackedScene]([ExtResource("4_tuyoq"), ExtResource("5_fjrip"), ExtResource("6_smehm")])
 
 [node name="SpawnPath" type="Path2D" parent="EnemySpawner" unique_id=1400909616]
 curve = SubResource("Curve2D_g2els")
 
+[node name="PathFollow2D" type="PathFollow2D" parent="EnemySpawner/SpawnPath" unique_id=644133295]
+unique_name_in_owner = true
+position = Vector2(-336, -197)
+rotation = -0.002954201
+
 [node name="SpawnTimer" type="Timer" parent="EnemySpawner" unique_id=289531471]
+wait_time = 0.5
+autostart = true

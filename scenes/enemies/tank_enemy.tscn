@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://jfbv72tdkpga"]
 
-[ext_resource type="PackedScene" uid="uid://cch7q0coyjchr" path="res://scenes/base_enemy.tscn" id="1_1jugj"]
-[ext_resource type="Texture2D" uid="uid://3qsdmlr4spc" path="res://assets/characters/enemy/tank-sheet.png" id="2_ubg1q"]
+[ext_resource type="PackedScene" uid="uid://cch7q0coyjchr" path="res://scenes/base_enemy.tscn" id="1_egecj"]
+[ext_resource type="Texture2D" uid="uid://3qsdmlr4spc" path="res://assets/characters/enemy/tank-sheet.png" id="2_oq5wy"]
 
 [sub_resource type="Animation" id="Animation_p67f1"]
 length = 0.001
@@ -46,10 +46,11 @@ _data = {
 radius = 12.0
 height = 42.0
 
-[node name="TankEnemy" unique_id=510154604 instance=ExtResource("1_1jugj")]
+[node name="TankEnemy" unique_id=510154604 instance=ExtResource("1_egecj")]
+speed = 25.0
 
 [node name="Sprite2D" parent="." index="0" unique_id=1952026308]
-texture = ExtResource("2_ubg1q")
+texture = ExtResource("2_oq5wy")
 hframes = 4
 
 [node name="AnimationPlayer" parent="." index="1" unique_id=1135669645]

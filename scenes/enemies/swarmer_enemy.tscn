@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://c2n1wqqbd8fvc"]
 
-[ext_resource type="PackedScene" uid="uid://cch7q0coyjchr" path="res://scenes/base_enemy.tscn" id="1_qlohm"]
-[ext_resource type="Texture2D" uid="uid://2daxbxcrbwxq" path="res://assets/characters/enemy/swarmer-sheet.png" id="2_dnslu"]
+[ext_resource type="PackedScene" uid="uid://cch7q0coyjchr" path="res://scenes/base_enemy.tscn" id="1_b2cjt"]
+[ext_resource type="Texture2D" uid="uid://2daxbxcrbwxq" path="res://assets/characters/enemy/swarmer-sheet.png" id="2_i4i6t"]
 
 [sub_resource type="Animation" id="Animation_ks78l"]
 length = 0.001
@@ -46,10 +46,11 @@ _data = {
 radius = 6.0
 height = 22.0
 
-[node name="SwarmerEnemy" unique_id=510154604 instance=ExtResource("1_qlohm")]
+[node name="SwarmerEnemy" unique_id=510154604 instance=ExtResource("1_b2cjt")]
+speed = 150.0
 
 [node name="Sprite2D" parent="." index="0" unique_id=1952026308]
-texture = ExtResource("2_dnslu")
+texture = ExtResource("2_i4i6t")
 hframes = 4
 
 [node name="AnimationPlayer" parent="." index="1" unique_id=1135669645]
