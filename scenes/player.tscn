@@ -1,0 +1,84 @@
+[gd_scene format=3 uid="uid://csnyr2ksjamv2"]
+
+[ext_resource type="Texture2D" uid="uid://dkw3rwkfwomd" path="res://assets/characters/friendly/player-sheet.png" id="1_3vyb7"]
+[ext_resource type="Script" uid="uid://ccs475ppoe4vb" path="res://scenes/player.gd" id="1_g2els"]
+
+[sub_resource type="Animation" id="Animation_g2els"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_qhqgy"]
+resource_name = "idle"
+length = 0.083341666
+step = 0.083333336
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+
+[sub_resource type="Animation" id="Animation_dqkch"]
+resource_name = "run"
+length = 0.3333417
+loop_mode = 1
+step = 0.083333336
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.083333336, 0.16666667, 0.25),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_qlg0r"]
+_data = {
+&"RESET": SubResource("Animation_g2els"),
+&"idle": SubResource("Animation_qhqgy"),
+&"run": SubResource("Animation_dqkch")
+}
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_tuyoq"]
+radius = 6.0
+height = 16.0
+
+[node name="Player" type="CharacterBody2D" unique_id=403663915]
+script = ExtResource("1_g2els")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=631844830]
+texture = ExtResource("1_3vyb7")
+hframes = 4
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=734818586]
+root_node = NodePath("../Sprite2D")
+libraries/ = SubResource("AnimationLibrary_qlg0r")
+autoplay = &"idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=23682788]
+position = Vector2(0, 3)
+shape = SubResource("CapsuleShape2D_tuyoq")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=245520353]
+zoom = Vector2(2, 2)
