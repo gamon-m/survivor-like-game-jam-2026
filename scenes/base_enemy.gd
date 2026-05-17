@@ -2,6 +2,7 @@ extends CharacterBody2D
 
 @export var speed = 100.0
 @export var player_reference : CharacterBody2D
+@export var enemy_type: String
 
 func _physics_process(_delta: float) -> void:
 	if !player_reference:

@@ -48,6 +48,7 @@ height = 42.0
 
 [node name="TankEnemy" unique_id=510154604 instance=ExtResource("1_egecj")]
 speed = 25.0
+enemy_type = "tank"
 
 [node name="Sprite2D" parent="." index="0" unique_id=1952026308]
 texture = ExtResource("2_oq5wy")
