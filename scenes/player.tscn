@@ -64,6 +64,12 @@ _data = {
 radius = 6.0
 height = 16.0
 
+[sub_resource type="Curve2D" id="Curve2D_g2els"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, -336, -197, 0, 0, 0, 0, 341, -199, 0, 0, 0, 0, 343, 192, 0, 0, 0, 0, -339, 192, 0, 0, 0, 0, -336, -197)
+}
+point_count = 5
+
 [node name="Player" type="CharacterBody2D" unique_id=403663915]
 script = ExtResource("1_g2els")
 
@@ -82,3 +88,13 @@ shape = SubResource("CapsuleShape2D_tuyoq")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=245520353]
 zoom = Vector2(2, 2)
+process_callback = 0
+position_smoothing_enabled = true
+position_smoothing_speed = 20.0
+
+[node name="EnemySpawner" type="Node2D" parent="." unique_id=159729331]
+
+[node name="SpawnPath" type="Path2D" parent="EnemySpawner" unique_id=1400909616]
+curve = SubResource("Curve2D_g2els")
+
+[node name="SpawnTimer" type="Timer" parent="EnemySpawner" unique_id=289531471]
