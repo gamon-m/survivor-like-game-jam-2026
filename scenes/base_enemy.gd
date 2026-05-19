@@ -30,6 +30,11 @@ func _physics_process(_delta: float) -> void:
 
 	move_and_slide()
 
+	var targets = $Hitbox.get_overlapping_bodies()
+	for target in targets:
+		if target is Player:
+			target.take_damage(contact_damage)			
+
 func take_damage(damage):
 	health -= damage
 	if health <= 0:
@@ -39,8 +44,3 @@ func take_damage(damage):
 		xp_gem.xp_amount = xp_gem.xp_amount * xp_multiplier
 		get_tree().current_scene.call_deferred("add_child", xp_gem)
 
-func _on_hitbox_body_entered(body):
-	print("Enemy hitbox entered by: ", body.name, " is_player: ", body is Player)
-	if body is Player:
-		print("Dealing ", contact_damage, " damage to player")
-		body.take_damage(contact_damage)

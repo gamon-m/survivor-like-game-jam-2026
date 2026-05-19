@@ -65,7 +65,7 @@ var upgrade_templates = [
 	}
 ]
 
-var rarity_weights = {"common": 80, "rare": 20}
+var rarity_weights = {"common": 0, "rare": 100}
 
 func _ready() -> void:
 	xp_bar.value = 0
@@ -86,9 +86,9 @@ func _on_player_xp_gained(current, max_xp) -> void:
 	xp_bar.value = current
 	xp_bar.max_value = max_xp
 
-func _on_player_health_changed(current, max) -> void:
+func _on_player_health_changed(current, max_health) -> void:
+	health_bar.max_value = max_health
 	health_bar.value = current
-	health_bar.max_value = max
 
 func _on_player_leveled_up() -> void:
 	level_up_label.text = "Choose your reward!"
@@ -155,9 +155,12 @@ func _generate_random_upgrade() -> Dictionary:
 	var display_old = _format_stat(template.stat, old_val)
 	var display_new = _format_stat(template.stat, new_val)
 	
+	var label = "%s (%s → %s)" % [template.label, display_old, display_new]
+	if rarity == "rare":
+		label = "RARE!!! " + label
 	return {
 		"stat": template.stat,
-		"label": "%s %s (%s → %s)" % ["Rare" if rarity == "rare" else "Common", template.label, display_old, display_new],
+		"label": label,
 		"rarity": rarity,
 		"value": final_val
 	}

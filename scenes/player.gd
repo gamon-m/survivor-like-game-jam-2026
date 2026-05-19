@@ -8,14 +8,13 @@ signal died
 signal health_changed(current, max)
 
 
-@export var speed = 150.0
+@export var speed = 100.0
 @export var health = 100
 @export var max_health = 100
 @export var damage = 10
 @export var crit_chance = 0.0
 @export var shot_speed = 1
 @export var shot_range = 50
-@export var damage_cooldown = 1.0
 
 var xp = 0
 var xp_level = 0
@@ -30,7 +29,6 @@ var stat_levels = {
 	"speed": 0
 }
 
-var _damage_timer = 0.0
 var companions = []
 
 
@@ -48,20 +46,27 @@ func _physics_process(delta: float) -> void:
 	else:
 		$AnimationPlayer.play("idle")
 
-	_damage_timer = max(0, _damage_timer - delta)
+func _on_damage_timer_timeout():
+	for body in $Hitbox.get_overlapping_bodies():
+		if "contact_damage" in body:
+			take_damage(body.contact_damage)
+			break
 
 func take_damage(amount):
-	if _damage_timer > 0:
+	if $DamageTimer.time_left > 0:
 		return
+
 	health -= amount
-	_damage_timer = damage_cooldown
 	health_changed.emit(health, max_health)
+
+	$DamageTimer.start()
+
 	if health <= 0:
 		health = 0
 		died.emit()
-		set_physics_process(false)
-		$Sprite2D.visible = false
-		$Hitbox.monitorable = false
+		$CollisionShape2D.set_deferred("disabled", true)
+		hide()
+		get_tree().paused = true
 
 func gain_xp(amount):
 	xp += amount
@@ -94,17 +99,9 @@ func apply_stat(stat_name: String, value: float) -> void:
 			speed += value
 
 	stat_levels[stat_name] += 1
-	print("applied stat %s" % stat_name + " with value %s" % value)
 
 func get_stat_level(stat_name: String) -> int:
 	return stat_levels.get(stat_name, 0)
-
-func _on_hitbox_body_entered(body):
-	print("Player hitbox entered by: ", body.name, " has contact_damage: ", "contact_damage" in body)
-	if body.has_method("take_damage"):
-		return
-	if "contact_damage" in body:
-		take_damage(body.contact_damage)
 
 func heal(amount):
 	health = min(health + amount, max_health)
