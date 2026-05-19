@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://csshytl7f30sh"]
+
+[ext_resource type="Script" uid="uid://b0vvyk24dhogg" path="res://experience_gem.gd" id="1_6j5do"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_3udao"]
+load_path = "res://.godot/imported/xp-orb.png-bc0e1f0b9eb487dc3469c8c4a23e9012.ctex"
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_hp7xb"]
+radius = 15.0
+
+[node name="ExperienceGem" type="Area2D" unique_id=55014473]
+script = ExtResource("1_6j5do")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1626747496]
+texture = SubResource("CompressedTexture2D_3udao")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=356100845]
+shape = SubResource("CircleShape2D_hp7xb")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

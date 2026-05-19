@@ -1,13 +1,19 @@
 [gd_scene format=3 uid="uid://cch7q0coyjchr"]
 
 [ext_resource type="Script" uid="uid://b6awxmd81et43" path="res://scenes/base_enemy.gd" id="1_n1jr3"]
+[ext_resource type="PackedScene" uid="uid://csshytl7f30sh" path="res://scenes/experience_gem.tscn" id="2_sw3va"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_t1as8"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_hitbox"]
+radius = 8.0
+height = 20.0
 
 [node name="BaseEnemy" type="CharacterBody2D" unique_id=510154604]
 collision_layer = 2
 collision_mask = 2
 script = ExtResource("1_n1jr3")
+loot_scene = ExtResource("2_sw3va")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1952026308]
 
@@ -15,3 +21,12 @@ script = ExtResource("1_n1jr3")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1871703552]
 shape = SubResource("RectangleShape2D_t1as8")
+
+[node name="Hitbox" type="Area2D" parent="." unique_id=1871703553]
+collision_layer = 2
+collision_mask = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=1871703554]
+shape = SubResource("CapsuleShape2D_hitbox")
+
+[connection signal="body_entered" from="Hitbox" to="." method="_on_hitbox_body_entered"]

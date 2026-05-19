@@ -7,6 +7,8 @@
 [ext_resource type="PackedScene" uid="uid://t6ibr3w4866r" path="res://scenes/enemies/chaser_enemy.tscn" id="4_tuyoq"]
 [ext_resource type="PackedScene" uid="uid://c2n1wqqbd8fvc" path="res://scenes/enemies/swarmer_enemy.tscn" id="5_fjrip"]
 [ext_resource type="PackedScene" uid="uid://jfbv72tdkpga" path="res://scenes/enemies/tank_enemy.tscn" id="6_smehm"]
+[ext_resource type="Script" uid="uid://duu1wcndgi5uj" path="res://scenes/holster.gd" id="8_smehm"]
+[ext_resource type="PackedScene" uid="uid://n7vm5rbjgf8x" path="res://scenes/projectile.tscn" id="9_ur7pv"]
 
 [sub_resource type="Animation" id="Animation_g2els"]
 length = 0.001
@@ -65,6 +67,10 @@ _data = {
 &"run": SubResource("Animation_dqkch")
 }
 
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ur7pv"]
+radius = 6.0
+height = 18.0
+
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_tuyoq"]
 radius = 6.0
 height = 16.0
@@ -89,9 +95,12 @@ metadata/_custom_type_script = "uid://nvhirvndv85j"
 
 [sub_resource type="Curve2D" id="Curve2D_g2els"]
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, -336, -197, 0, 0, 0, 0, 341, -199, 0, 0, 0, 0, 343, 192, 0, 0, 0, 0, -339, 192, 0, 0, 0, 0, -336, -197)
+"points": PackedVector2Array(0, 0, 0, 0, -457, -288, 0, 0, 0, 0, 476, -277, 0, 0, 0, 0, 471, 277, 0, 0, 0, 0, -474, 281, 0, 0, 0, 0, -457, -288)
 }
 point_count = 5
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_fjrip"]
+radius = 200.0
 
 [node name="Player" type="CharacterBody2D" unique_id=403663915]
 script = ExtResource("1_g2els")
@@ -105,12 +114,20 @@ root_node = NodePath("../Sprite2D")
 libraries/ = SubResource("AnimationLibrary_qlg0r")
 autoplay = &"idle"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=23682788]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1982246300]
+position = Vector2(0, 2)
+shape = SubResource("CapsuleShape2D_ur7pv")
+
+[node name="Hitbox" type="Area2D" parent="." unique_id=23682788]
 position = Vector2(0, 3)
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=23682790]
 shape = SubResource("CapsuleShape2D_tuyoq")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=245520353]
-zoom = Vector2(2, 2)
+zoom = Vector2(1.5, 1.5)
 process_callback = 0
 position_smoothing_enabled = true
 position_smoothing_speed = 20.0
@@ -124,9 +141,27 @@ curve = SubResource("Curve2D_g2els")
 
 [node name="PathFollow2D" type="PathFollow2D" parent="EnemySpawner/SpawnPath" unique_id=644133295]
 unique_name_in_owner = true
-position = Vector2(-336, -197)
-rotation = -0.002954201
+position = Vector2(-457, -288)
+rotation = 0.011789379
 
 [node name="SpawnTimer" type="Timer" parent="EnemySpawner" unique_id=289531471]
 wait_time = 0.5
 autostart = true
+
+[node name="Holster" type="Node2D" parent="." unique_id=699407281]
+script = ExtResource("8_smehm")
+scene = ExtResource("9_ur7pv")
+
+[node name="Timer" type="Timer" parent="Holster" unique_id=1532628550]
+wait_time = 0.6
+autostart = true
+
+[node name="RangeFinder" type="Area2D" parent="Holster" unique_id=2088692571]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Holster/RangeFinder" unique_id=125606291]
+shape = SubResource("CircleShape2D_fjrip")
+
+[connection signal="timeout" from="Holster/Timer" to="Holster" method="_on_timer_timeout"]
+[connection signal="body_entered" from="Hitbox" to="Player" method="_on_hitbox_body_entered"]

@@ -3,8 +3,15 @@
 [ext_resource type="PackedScene" uid="uid://csnyr2ksjamv2" path="res://scenes/player.tscn" id="1_o5qli"]
 [ext_resource type="Texture2D" uid="uid://ck23vqty4oeg1" path="res://assets/environment/ground/ground2.png" id="2_jyhfs"]
 [ext_resource type="Script" uid="uid://bpmid46rqdjih" path="res://scenes/ground_parallax_2d.gd" id="2_sugp2"]
+[ext_resource type="Script" uid="uid://dsk3keaftbkl6" path="res://scenes/ui.gd" id="4_jyhfs"]
+[ext_resource type="Script" uid="uid://cu4qee8oe4x8b" path="res://scenes/main.gd" id="5_main"]
+[ext_resource type="PackedScene" path="res://scenes/game_over.tscn" id="6_gameover"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tefeu"]
+bg_color = Color(1, 0, 0, 1)
 
 [node name="Main" type="Node2D" unique_id=1798292128]
+script = ExtResource("5_main")
 
 [node name="GroundParallax2D" type="Parallax2D" parent="." unique_id=590339952]
 repeat_size = Vector2(16, 16)
@@ -20,3 +27,67 @@ region_rect = Rect2(0, 0, 4000, 4000)
 [node name="Player" parent="." unique_id=403663915 instance=ExtResource("1_o5qli")]
 
 [node name="EnemiesContainer" type="Node2D" parent="." unique_id=1865259369]
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=458168425 node_paths=PackedStringArray("player")]
+process_mode = 2
+script = ExtResource("4_jyhfs")
+compananion_pool = null
+player = NodePath("../Player")
+
+[node name="ProgressBar" type="ProgressBar" parent="UI" unique_id=1010665574]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 27.0
+grow_horizontal = 2
+
+[node name="HealthBar" type="ProgressBar" parent="UI" unique_id=1010665575]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -27.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/fill = SubResource("StyleBoxFlat_tefeu")
+
+[node name="LevelUpPanel" type="Panel" parent="UI" unique_id=1623605455]
+visible = false
+custom_minimum_size = Vector2(400, 500)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/LevelUpPanel" unique_id=523013827]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="UI/LevelUpPanel/VBoxContainer" unique_id=538082826]
+layout_mode = 2
+text = "LEVEL UP!"
+horizontal_alignment = 1
+
+[node name="Button" type="Button" parent="UI/LevelUpPanel/VBoxContainer" unique_id=1410307096]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Button2" type="Button" parent="UI/LevelUpPanel/VBoxContainer" unique_id=995146234]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Button3" type="Button" parent="UI/LevelUpPanel/VBoxContainer" unique_id=1587149185]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="GameOver" parent="." unique_id=700000001 instance=ExtResource("6_gameover")]

@@ -49,6 +49,9 @@ height = 22.0
 [node name="SwarmerEnemy" unique_id=510154604 instance=ExtResource("1_b2cjt")]
 speed = 150.0
 enemy_type = "swarmer"
+base_health = 10
+health_multiplier = 0.5
+contact_damage = 5
 
 [node name="Sprite2D" parent="." index="0" unique_id=1952026308]
 texture = ExtResource("2_i4i6t")
