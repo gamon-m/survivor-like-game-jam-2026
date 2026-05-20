@@ -25,21 +25,21 @@ var upgrade_templates = [
 		"stat": "damage",
 		"label": "Damage",
 		"base_min": 2,
-		"base_max": 5,
+		"base_max": 4,
 		"scale_per_level": 0.3
 	},
 	{
 		"stat": "crit_chance",
 		"label": "Crit Chance",
 		"base_min": 0.02,
-		"base_max": 0.05,
+		"base_max": 0.04,
 		"scale_per_level": 0.2
 	},
 	{
-		"stat": "shot_speed",
-		"label": "Shot Speed",
+		"stat": "shot_delay",
+		"label": "Shot Delay",
 		"base_min": 0.05,
-		"base_max": 0.2,
+		"base_max": 0.1,
 		"scale_per_level": 0.1
 	},
 	{
@@ -60,7 +60,7 @@ var upgrade_templates = [
 		"stat": "speed",
 		"label": "Movement Speed",
 		"base_min": 5,
-		"base_max": 15,
+		"base_max": 10,
 		"scale_per_level": 0.1
 	}
 ]
@@ -169,7 +169,7 @@ func _get_current_stat(stat_name: String) -> float:
 	match stat_name:
 		"damage": return player.damage
 		"crit_chance": return player.crit_chance
-		"shot_speed": return player.shot_speed
+		"shot_delay": return player.shot_delay
 		"shot_range": return player.shot_range
 		"max_health": return player.max_health
 		"speed": return player.speed
@@ -178,7 +178,7 @@ func _get_current_stat(stat_name: String) -> float:
 func _format_stat(stat_name: String, value: float) -> String:
 	match stat_name:
 		"crit_chance": return "%d%%" % int(value * 100)
-		"damage", "max_health", "shot_speed", "shot_range": return "%d" % int(value)
+		"damage", "max_health", "shot_delay", "shot_range": return "%d" % int(value)
 		"speed": return "%.1f" % value
 	return "%s" % value
 

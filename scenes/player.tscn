@@ -164,7 +164,7 @@ autostart = true
 collision_layer = 0
 collision_mask = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Holster/RangeFinder" unique_id=125606291]
+[node name="Range" type="CollisionShape2D" parent="Holster/RangeFinder" unique_id=125606291]
 shape = SubResource("CircleShape2D_fjrip")
 
 [connection signal="timeout" from="Holster/Timer" to="Holster" method="_on_timer_timeout"]

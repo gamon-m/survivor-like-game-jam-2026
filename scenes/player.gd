@@ -13,8 +13,8 @@ signal health_changed(current, max)
 @export var max_health = 100
 @export var damage = 10
 @export var crit_chance = 0.0
-@export var shot_speed = 1
-@export var shot_range = 50
+@export var shot_delay = 1.0
+@export var shot_range = 75
 
 var xp = 0
 var xp_level = 0
@@ -23,7 +23,7 @@ var xp_required = 10
 var stat_levels = {
 	"damage": 0,
 	"crit_chance": 0,
-	"shot_speed": 0,
+	"shot_delay": 0,
 	"shot_range": 0,
 	"max_health": 0,
 	"speed": 0
@@ -32,7 +32,7 @@ var stat_levels = {
 var companions = []
 
 
-func _physics_process(delta: float) -> void:	
+func _physics_process(delta: float) -> void:
 	var direction = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	velocity = direction * speed
 	move_and_slide()
@@ -87,10 +87,12 @@ func apply_stat(stat_name: String, value: float) -> void:
 			damage += int(value)
 		"crit_chance":
 			crit_chance += value
-		"shot_speed":
-			shot_speed += int(value)
+		"shot_delay":
+			shot_delay -= value
+			$Holster/Timer.wait_time = shot_delay
 		"shot_range":
 			shot_range += int(value)
+			$Holster/RangeFinder/Range.shape.radius = shot_range
 		"max_health":
 			max_health += int(value)
 			health += int(value)
