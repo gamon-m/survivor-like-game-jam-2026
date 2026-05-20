@@ -1,13 +1,15 @@
 extends CanvasLayer
 
-@export var compananion_pool: PackedStringArray = [
-    "bomber", 
-    "damage_augmentor", 
-    "full_auto", 
-    "gunner", 
-    "meatshield", 
-    "speed_augmentor"
-    ]
+@export var compananion_pool = {
+	"gunner": {
+		"name": "Gunner",
+		"scene": preload("res://scenes/companions/gunner_companion.tscn")
+	},
+	"meatshield": {
+		"name": "Meatshield",
+		"scene": preload("res://scenes/companions/meatshield_companion.tscn")
+	}
+} 
 @export var player: Player
 @onready var xp_bar: ProgressBar = $ProgressBar
 @onready var health_bar: ProgressBar = $HealthBar
@@ -52,8 +54,8 @@ var upgrade_templates = [
 	{
 		"stat": "max_health",
 		"label": "Health",
-		"base_min": 20,
-		"base_max": 50,
+		"base_min": 15,
+		"base_max": 30,
 		"scale_per_level": 0
 	},
 	{
@@ -97,18 +99,18 @@ func _on_player_leveled_up() -> void:
 	$LevelUpPanel.visible = true
 	xp_bar.value = 0
 	
-	var companion = compananion_pool[randi() % compananion_pool.size()]
+	var companion_data = _generate_random_companion()
 	var upgrade = _generate_random_upgrade()
 	var heal_amount = int(player.max_health * 0.3)
 	
-	character_button.text = "Companion: " + companion.capitalize()
+	character_button.text = "Companion: " + companion_data.name
 	character_button.disabled = false
 	stat_up_button.text = upgrade.label
 	stat_up_button.disabled = false
 	heal_button.text = "Heal (%d HP)" % heal_amount
 	heal_button.disabled = false
 	
-	_character_callable = _on_companion_selected.bind(companion)
+	_character_callable = _on_companion_selected.bind(companion_data)
 	_stat_callable = _on_stat_selected.bind(upgrade)
 	_heal_callable = _on_heal_selected.bind(heal_amount)
 	
@@ -116,8 +118,13 @@ func _on_player_leveled_up() -> void:
 	stat_up_button.pressed.connect(_stat_callable)
 	heal_button.pressed.connect(_heal_callable)
 
-func _on_companion_selected(companion):
-	player.companions.append(companion)
+func _on_companion_selected(companion_data):
+	var companion = companion_data.scene.instantiate()
+	companion.player = player
+	companion.type = companion_data.name
+	companion.global_position = player.global_position + Vector2(randf_range(-100, 100), randf_range(-100, 100))
+	get_tree().current_scene.add_child(companion)
+	player.add_companion(companion)
 	_on_resume()
 	_clear_button_signals()
 
@@ -152,7 +159,11 @@ func _generate_random_upgrade() -> Dictionary:
 	var final_val = base_val * rarity_multiplier * level_multiplier
 	
 	var old_val = _get_current_stat(template.stat)
+
 	var new_val = old_val + final_val
+	if template.stat == "shot_delay":
+		new_val = old_val - final_val
+		new_val = _cap_shot_delay(new_val)
 
 	if template.stat == "shot_range":
 		new_val = _cap_range_up(new_val)
@@ -173,9 +184,12 @@ func _generate_random_upgrade() -> Dictionary:
 	}
 
 func _get_available_upgrade() -> Dictionary:
+	var available = upgrade_templates
 	if player.shot_range >= 200:
-		return upgrade_templates.filter(func(t): return t.stat != "shot_range").pick_random()
-	return upgrade_templates[3]
+		available = available.filter(func(t): return t.stat != "shot_range")
+	if player.shot_delay <= 0.2:
+		available = available.filter(func(t): return t.stat != "shot_delay")
+	return available.pick_random()
 
 func _get_current_stat(stat_name: String) -> float:
 	match stat_name:
@@ -190,8 +204,8 @@ func _get_current_stat(stat_name: String) -> float:
 func _format_stat(stat_name: String, value: float) -> String:
 	match stat_name:
 		"crit_chance": return "%d%%" % int(value * 100)
-		"damage", "max_health", "shot_delay", "shot_range": return "%d" % int(value)
-		"speed": return "%.1f" % value
+		"damage", "max_health", "shot_range", "speed": return "%d" % int(value)
+		"shot_delay": return "%.2fs" % value
 	return "%s" % value
 
 func _weighted_pick(weights: Dictionary) -> String:
@@ -207,3 +221,12 @@ func _cap_range_up(value) -> float:
 	if value >= 200:
 		return 200
 	return value
+
+func _cap_shot_delay(value) -> float:
+	if value <= 0.2:
+		return 0.2
+	return value
+
+func _generate_random_companion():
+	var key = compananion_pool.keys().pick_random()
+	return compananion_pool[key]

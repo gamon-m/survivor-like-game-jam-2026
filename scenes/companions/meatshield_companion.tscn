@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://hrc1moxt43cx"]
+
+[ext_resource type="PackedScene" uid="uid://b0ultr6lbbw14" path="res://scenes/base_companion.tscn" id="1_g076x"]
+[ext_resource type="Texture2D" uid="uid://bg8hc0ohyum5x" path="res://assets/characters/friendly/meatshield-sheet.png" id="2_eg3i2"]
+
+[node name="MeatshieldCompanion" unique_id=1239355510 instance=ExtResource("1_g076x")]
+type = "meatshield"
+
+[node name="Sprite2D" parent="." index="0" unique_id=1413762317]
+texture = ExtResource("2_eg3i2")
+hframes = 4

@@ -8,7 +8,7 @@ signal died
 signal health_changed(current, max)
 
 
-@export var speed = 100.0
+@export var speed = 100
 @export var health = 100
 @export var max_health = 100
 @export var damage = 10
@@ -18,7 +18,6 @@ signal health_changed(current, max)
 
 var xp = 0
 var xp_level = 0
-# var xp_required = 10
 var xp_required = 1
 
 var stat_levels = {
@@ -30,7 +29,7 @@ var stat_levels = {
 	"speed": 0
 }
 
-var companions = []
+var companions: Array[BaseCompanion] = []
 
 
 func _physics_process(delta: float) -> void:
@@ -79,7 +78,7 @@ func gain_xp(amount):
 
 func level_up():
 	xp_level += 1
-	# xp_required = int(xp_required * 1.5)
+	xp_required = int(xp_required * 1.5)
 	leveled_up.emit()
 
 func apply_stat(stat_name: String, value: float) -> void:
@@ -89,17 +88,17 @@ func apply_stat(stat_name: String, value: float) -> void:
 		"crit_chance":
 			crit_chance += value
 		"shot_delay":
-			shot_delay -= value
+			shot_delay = max(shot_delay - value, 0.2)
 			$Holster/Timer.wait_time = shot_delay
 		"shot_range":
-			shot_range += int(value)
+			shot_range = min(shot_range + value, 200)
 			$Holster/RangeFinder/Range.shape.radius = shot_range
 		"max_health":
 			max_health += int(value)
 			health += int(value)
 			health_changed.emit(health, max_health)
 		"speed":
-			speed += value
+			speed += int(value)
 
 	stat_levels[stat_name] += 1
 
@@ -109,3 +108,14 @@ func get_stat_level(stat_name: String) -> int:
 func heal(amount):
 	health = min(health + amount, max_health)
 	health_changed.emit(health, max_health)
+
+func add_companion(companion: BaseCompanion):
+	companions.append(companion)
+	_update_companion_chain()
+
+func _update_companion_chain():
+	for i in range(companions.size()):
+		if i == 0:
+			companions[i].follow_target = self
+		else:
+			companions[i].follow_target = companions[i - 1]
