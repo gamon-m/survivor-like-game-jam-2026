@@ -18,7 +18,8 @@ signal health_changed(current, max)
 
 var xp = 0
 var xp_level = 0
-var xp_required = 10
+# var xp_required = 10
+var xp_required = 1
 
 var stat_levels = {
 	"damage": 0,
@@ -78,7 +79,7 @@ func gain_xp(amount):
 
 func level_up():
 	xp_level += 1
-	xp_required = int(xp_required * 1.5)
+	# xp_required = int(xp_required * 1.5)
 	leveled_up.emit()
 
 func apply_stat(stat_name: String, value: float) -> void:

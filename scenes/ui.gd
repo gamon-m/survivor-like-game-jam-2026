@@ -31,9 +31,9 @@ var upgrade_templates = [
 	{
 		"stat": "crit_chance",
 		"label": "Crit Chance",
-		"base_min": 0.02,
-		"base_max": 0.04,
-		"scale_per_level": 0.2
+		"base_min": 0.01,
+		"base_max": 0.03,
+		"scale_per_level": 0.1
 	},
 	{
 		"stat": "shot_delay",
@@ -65,7 +65,8 @@ var upgrade_templates = [
 	}
 ]
 
-var rarity_weights = {"common": 0, "rare": 100}
+var rarity_weights = {"common": 80, "rare": 20}
+var disable_range_up = false
 
 func _ready() -> void:
 	xp_bar.value = 0
@@ -140,7 +141,7 @@ func _on_resume():
 	get_tree().paused = false
 
 func _generate_random_upgrade() -> Dictionary:
-	var template = upgrade_templates.pick_random()
+	var template = _get_available_upgrade()
 	var current_stat_level = player.get_stat_level(template.stat)
 	var rarity = _weighted_pick(rarity_weights)
 
@@ -152,18 +153,29 @@ func _generate_random_upgrade() -> Dictionary:
 	
 	var old_val = _get_current_stat(template.stat)
 	var new_val = old_val + final_val
+
+	if template.stat == "shot_range":
+		new_val = _cap_range_up(new_val)
+
 	var display_old = _format_stat(template.stat, old_val)
 	var display_new = _format_stat(template.stat, new_val)
 	
 	var label = "%s (%s → %s)" % [template.label, display_old, display_new]
 	if rarity == "rare":
 		label = "RARE!!! " + label
+
+
 	return {
 		"stat": template.stat,
 		"label": label,
 		"rarity": rarity,
 		"value": final_val
 	}
+
+func _get_available_upgrade() -> Dictionary:
+	if player.shot_range >= 200:
+		return upgrade_templates.filter(func(t): return t.stat != "shot_range").pick_random()
+	return upgrade_templates[3]
 
 func _get_current_stat(stat_name: String) -> float:
 	match stat_name:
@@ -191,3 +203,7 @@ func _weighted_pick(weights: Dictionary) -> String:
 		if roll <= 0: return key
 	return weights.keys()[0]
 
+func _cap_range_up(value) -> float:
+	if value >= 200:
+		return 200
+	return value
