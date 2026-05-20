@@ -29,5 +29,6 @@ func shoot(target):
 
 	projectile.look_at(target.global_position)
 	projectile.damage = get_parent().damage
+	projectile.crit_chance = get_parent().crit_chance
 
 	get_tree().current_scene.add_child(projectile)
