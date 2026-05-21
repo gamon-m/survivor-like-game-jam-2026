@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://ral1wxramf4e"]
+
+[ext_resource type="Script" uid="uid://duu1wcndgi5uj" path="res://scenes/holster.gd" id="1_ny3o4"]
+[ext_resource type="PackedScene" uid="uid://n7vm5rbjgf8x" path="res://scenes/projectile.tscn" id="2_o5mrt"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_fjrip"]
+radius = 75.0
+
+[node name="Holster" type="Node2D" unique_id=361672200]
+script = ExtResource("1_ny3o4")
+scene = ExtResource("2_o5mrt")
+
+[node name="Timer" type="Timer" parent="." unique_id=1254157017]
+wait_time = 0.6
+autostart = true
+
+[node name="RangeFinder" type="Area2D" parent="." unique_id=808216003]
+collision_layer = 0
+collision_mask = 2
+
+[node name="Range" type="CollisionShape2D" parent="RangeFinder" unique_id=1516682367]
+shape = SubResource("CircleShape2D_fjrip")
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

@@ -7,13 +7,25 @@ extends CharacterBody2D
 @export var follow_distance: float = 20
 @export var follow_speed: float = 3
 @export var type: String
+@export var holster_scene: PackedScene = preload("res://scenes/holster.tscn")
 
 var orbit_angle: float = 0.0
 var orbit_speed: float = 1.0
+var holster
+var damage = player.damage
+var crit_chance = 0
+var shot_range = player.shot_range
 
-# func _ready():
-	# if player:
-	# 	follow_speed = player.speed
+func _ready() -> void:
+	player.connect("leveled_up", _update_stats)
+
+	if type == "Meatshield":
+		return
+
+	holster = holster_scene.instantiate() as Node2D
+	add_child(holster)
+	holster.get_node("RangeFinder/Range").shape.radius = shot_range
+
 
 func _physics_process(delta: float) -> void:
 	if not follow_target:
@@ -36,3 +48,7 @@ func _process_orbit_movement(delta):
 	orbit_angle += delta * orbit_speed
 	var offset = Vector2(cos(orbit_angle), sin(orbit_angle)) * follow_distance
 	global_position = follow_target.global_position + offset
+
+func _update_stats():
+	damage = player.damage
+	shot_range = player.shot_range

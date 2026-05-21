@@ -7,8 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://t6ibr3w4866r" path="res://scenes/enemies/chaser_enemy.tscn" id="4_tuyoq"]
 [ext_resource type="PackedScene" uid="uid://c2n1wqqbd8fvc" path="res://scenes/enemies/swarmer_enemy.tscn" id="5_fjrip"]
 [ext_resource type="PackedScene" uid="uid://jfbv72tdkpga" path="res://scenes/enemies/tank_enemy.tscn" id="6_smehm"]
-[ext_resource type="Script" uid="uid://duu1wcndgi5uj" path="res://scenes/holster.gd" id="8_smehm"]
-[ext_resource type="PackedScene" uid="uid://n7vm5rbjgf8x" path="res://scenes/projectile.tscn" id="9_ur7pv"]
+[ext_resource type="PackedScene" uid="uid://ral1wxramf4e" path="res://scenes/holster.tscn" id="8_smehm"]
 
 [sub_resource type="Animation" id="Animation_g2els"]
 length = 0.001
@@ -99,9 +98,6 @@ _data = {
 }
 point_count = 5
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_fjrip"]
-radius = 75.0
-
 [node name="Player" type="CharacterBody2D" unique_id=403663915]
 collision_mask = 0
 script = ExtResource("1_g2els")
@@ -153,19 +149,4 @@ autostart = true
 wait_time = 0.5
 one_shot = true
 
-[node name="Holster" type="Node2D" parent="." unique_id=699407281]
-script = ExtResource("8_smehm")
-scene = ExtResource("9_ur7pv")
-
-[node name="Timer" type="Timer" parent="Holster" unique_id=1532628550]
-wait_time = 0.6
-autostart = true
-
-[node name="RangeFinder" type="Area2D" parent="Holster" unique_id=2088692571]
-collision_layer = 0
-collision_mask = 2
-
-[node name="Range" type="CollisionShape2D" parent="Holster/RangeFinder" unique_id=125606291]
-shape = SubResource("CircleShape2D_fjrip")
-
-[connection signal="timeout" from="Holster/Timer" to="Holster" method="_on_timer_timeout"]
+[node name="Holster" parent="." unique_id=361672200 instance=ExtResource("8_smehm")]
