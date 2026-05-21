@@ -18,6 +18,14 @@ extends CanvasLayer
 @onready var stat_up_button: Button = $LevelUpPanel/VBoxContainer/Button2
 @onready var heal_button: Button = $LevelUpPanel/VBoxContainer/Button3
 
+@onready var sacrifice_panel: Panel = $ReplaceCompanionPanel
+@onready var companion_one_button: Button = $ReplaceCompanionPanel/VBoxContainer/HBoxContainer/Companion1
+@onready var companion_two_button: Button = $ReplaceCompanionPanel/VBoxContainer/HBoxContainer/Companion2
+@onready var companion_three_button: Button = $ReplaceCompanionPanel/VBoxContainer/HBoxContainer/Companion3
+@onready var companion_four_button: Button = $ReplaceCompanionPanel/VBoxContainer/HBoxContainer/Companion4
+@onready var companion_five_button: Button = $ReplaceCompanionPanel/VBoxContainer/HBoxContainer/Companion5
+@onready var back_button: Button = $ReplaceCompanionPanel/VBoxContainer/BackButton
+
 var _character_callable: Callable
 var _stat_callable: Callable
 var _heal_callable: Callable
@@ -69,6 +77,7 @@ var upgrade_templates = [
 
 var rarity_weights = {"common": 80, "rare": 20}
 var disable_range_up = false
+var pending_companion_data
 
 func _ready() -> void:
 	xp_bar.value = 0
@@ -119,14 +128,60 @@ func _on_player_leveled_up() -> void:
 	heal_button.pressed.connect(_heal_callable)
 
 func _on_companion_selected(companion_data):
-	var companion = companion_data.scene.instantiate()
+	if player.companions.size() >= 5:
+		pending_companion_data = companion_data
+		$LevelUpPanel.visible = false
+		$ReplaceCompanionPanel.visible = true
+		_populate_sacrifice_buttons()
+	else:
+		var companion = companion_data.scene.instantiate()
+		companion.player = player
+		companion.type = companion_data.name
+		companion.global_position = player.global_position + Vector2(randf_range(-100, 100), randf_range(-100, 100))
+		get_tree().current_scene.add_child(companion)
+		player.add_companion(companion)
+		_on_resume()
+		_clear_button_signals()
+
+func _populate_sacrifice_buttons():
+	back_button.connect("pressed", _on_sacrifice_back)
+	for index in range(player.companions.size()):
+		match index:
+			0:
+				companion_one_button.text = player.companions[index].type
+				companion_one_button.connect("pressed", _on_sacrifice_selected.bind(index))
+			1:
+				companion_two_button.text = player.companions[index].type
+				companion_two_button.connect("pressed", _on_sacrifice_selected.bind(index))
+			2:
+				companion_three_button.text = player.companions[index].type
+				companion_three_button.connect("pressed", _on_sacrifice_selected.bind(index))
+			3: 
+				companion_four_button.text = player.companions[index].type
+				companion_four_button.connect("pressed", _on_sacrifice_selected.bind(index))
+			4:
+				companion_five_button.text = player.companions[index].type
+				companion_five_button.connect("pressed", _on_sacrifice_selected.bind(index))
+
+func _on_sacrifice_selected(index):
+	var companion_position = player.companions[index].global_position
+	player.companions[index].queue_free()
+	var companion = pending_companion_data.scene.instantiate()
+	player.replace_companion(index, companion)
 	companion.player = player
-	companion.type = companion_data.name
-	companion.global_position = player.global_position + Vector2(randf_range(-100, 100), randf_range(-100, 100))
+	companion.type = pending_companion_data.name
+	companion.global_position = companion_position
+	player.companions[index] = companion
+
 	get_tree().current_scene.add_child(companion)
-	player.add_companion(companion)
+	$ReplaceCompanionPanel.visible = false
 	_on_resume()
 	_clear_button_signals()
+
+func _on_sacrifice_back():
+	$ReplaceCompanionPanel.visible = false
+	$LevelUpPanel.visible = true
+	pending_companion_data = null
 
 func _on_stat_selected(upgrade):
 	player.apply_stat(upgrade.stat, upgrade.value)

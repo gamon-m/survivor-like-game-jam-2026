@@ -113,9 +113,21 @@ func add_companion(companion: BaseCompanion):
 	companions.append(companion)
 	_update_companion_chain()
 
+func replace_companion(index, companion: BaseCompanion):
+	companions[index] = companion
+	_update_companion_chain()
+
 func _update_companion_chain():
 	for i in range(companions.size()):
-		if i == 0:
+		if i == 0 or companions[i].type.to_lower() == "meatshield":
 			companions[i].follow_target = self
 		else:
-			companions[i].follow_target = companions[i - 1]
+			companions[i].follow_target = _find_previous(i - 1)
+
+func _find_previous(index: int):
+	if index < 0:
+		return self
+	if companions[index].type.to_lower() == "meatshield":
+		return _find_previous(index - 1)
+	return companions[index]
+

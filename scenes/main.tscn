@@ -89,5 +89,62 @@ size_flags_vertical = 3
 layout_mode = 2
 size_flags_vertical = 3
 
+[node name="ReplaceCompanionPanel" type="Panel" parent="UI" unique_id=776459277]
+visible = false
+custom_minimum_size = Vector2(500, 150)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/ReplaceCompanionPanel" unique_id=1965230681]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="UI/ReplaceCompanionPanel/VBoxContainer" unique_id=1970946902]
+layout_mode = 2
+text = "Select a companion to sacrifice"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/ReplaceCompanionPanel/VBoxContainer" unique_id=1440182299]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Companion1" type="Button" parent="UI/ReplaceCompanionPanel/VBoxContainer/HBoxContainer" unique_id=1303753959]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Companion2" type="Button" parent="UI/ReplaceCompanionPanel/VBoxContainer/HBoxContainer" unique_id=1715363020]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Companion3" type="Button" parent="UI/ReplaceCompanionPanel/VBoxContainer/HBoxContainer" unique_id=1701900385]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Companion4" type="Button" parent="UI/ReplaceCompanionPanel/VBoxContainer/HBoxContainer" unique_id=1716535290]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Companion5" type="Button" parent="UI/ReplaceCompanionPanel/VBoxContainer/HBoxContainer" unique_id=1108164360]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BackButton" type="Button" parent="UI/ReplaceCompanionPanel/VBoxContainer" unique_id=95432742]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Back"
+
 [node name="GameOver" parent="." unique_id=700000001 instance=ExtResource("6_gameover")]
-process_mode = 0

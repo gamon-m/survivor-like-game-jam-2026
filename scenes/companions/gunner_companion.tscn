@@ -62,7 +62,7 @@ _data = {
 }
 
 [node name="GunnerCompanion" unique_id=1239355510 instance=ExtResource("1_scrt6")]
-companion_type = "Gunner"
+type = "Gunner"
 
 [node name="Sprite2D" parent="." index="0" unique_id=1413762317]
 texture = ExtResource("2_31q0t")

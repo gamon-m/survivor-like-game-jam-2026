@@ -43,4 +43,3 @@ func take_damage(damage):
 		xp_gem.global_position = global_position
 		xp_gem.xp_amount = xp_gem.xp_amount * xp_multiplier
 		get_tree().current_scene.call_deferred("add_child", xp_gem)
-

@@ -12,28 +12,28 @@ extends CharacterBody2D
 var orbit_angle: float = 0.0
 var orbit_speed: float = 1.0
 var holster
-var damage = player.damage
+var damage = 0
 var crit_chance = 0
-var shot_range = player.shot_range
+var shot_range = 0
 
 func _ready() -> void:
 	player.connect("leveled_up", _update_stats)
 
-	if type == "Meatshield":
+	if type.to_lower() == "meatshield":
+		_setup_meatshield()
 		return
 
 	holster = holster_scene.instantiate() as Node2D
 	add_child(holster)
-	holster.get_node("RangeFinder/Range").shape.radius = shot_range
+
+	_update_stats()
 
 
 func _physics_process(delta: float) -> void:
 	if not follow_target:
-		print("no target")
 		return
 
-	if type == "Meatshield":
-		follow_target = player
+	if type.to_lower() == "meatshield":
 		_process_orbit_movement(delta)
 	else:
 		_process_lerp_movement(delta)
@@ -46,9 +46,26 @@ func _process_lerp_movement(delta):
 
 func _process_orbit_movement(delta):
 	orbit_angle += delta * orbit_speed
-	var offset = Vector2(cos(orbit_angle), sin(orbit_angle)) * follow_distance
+	var offset = Vector2(cos(orbit_angle), sin(orbit_angle)) * follow_distance * 2
 	global_position = follow_target.global_position + offset
 
 func _update_stats():
 	damage = player.damage
+	crit_chance = 0
 	shot_range = player.shot_range
+	if holster:
+		holster.get_node("RangeFinder/Range").shape.radius = shot_range
+
+func _setup_meatshield():
+	follow_target = player
+	get_node("ContactTimer").timeout.connect(_on_contact_timer_timeout)
+	get_node("MeatshieldHitbox").area_entered.connect(_on_hitbox_area_entered)
+	
+func _on_contact_timer_timeout():
+	for body in $MeatshieldHitbox.get_overlapping_bodies():
+		if body.has_method("take_damage"):
+			body.take_damage(damage)
+
+func _on_hitbox_area_entered(area: Area2D):
+	pass
+	
