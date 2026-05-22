@@ -1,0 +1,82 @@
+[gd_scene format=3 uid="uid://c3tnurmwb1dum"]
+
+[ext_resource type="PackedScene" uid="uid://cch7q0coyjchr" path="res://scenes/base_enemy.tscn" id="1_x205m"]
+[ext_resource type="Script" uid="uid://bnl60q1dfy2vm" path="res://scenes/enemies/marksman_enemy.gd" id="2_iqw27"]
+[ext_resource type="Texture2D" uid="uid://c6qedycxplhj6" path="res://assets/characters/enemy/marksman-sheet.png" id="2_xiusf"]
+[ext_resource type="PackedScene" uid="uid://ral1wxramf4e" path="res://scenes/holster.tscn" id="4_kvn2e"]
+[ext_resource type="Script" uid="uid://bhq7jrot70rqg" path="res://scenes/enemy_holster.gd" id="5_nncdq"]
+[ext_resource type="PackedScene" uid="uid://csshytl7f30sh" path="res://scenes/experience_gem.tscn" id="6_sw3va"]
+[ext_resource type="PackedScene" uid="uid://cmfak2d3r0s4m" path="res://scenes/enemy_projectile.tscn" id="7_kvn2e"]
+
+[sub_resource type="Animation" id="Animation_s3n43"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_ij8a6"]
+resource_name = "run"
+length = 0.3333417
+step = 0.083333336
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.083333336, 0.16666667, 0.25),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_iqw27"]
+_data = {
+&"RESET": SubResource("Animation_s3n43"),
+&"run": SubResource("Animation_ij8a6")
+}
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_xiusf"]
+height = 24.0
+
+[node name="MarksmanEnemy" unique_id=510154604 instance=ExtResource("1_x205m")]
+script = ExtResource("2_iqw27")
+speed = 35.0
+shot_range = 100
+bullet_scene = ExtResource("7_kvn2e")
+bullet_speed = 150
+bullet_damage = 10
+shot_delay = 1.5
+loot_scene = ExtResource("6_sw3va")
+
+[node name="Sprite2D" parent="." index="0" unique_id=1952026308]
+texture = ExtResource("2_xiusf")
+hframes = 4
+
+[node name="AnimationPlayer" parent="." index="1" unique_id=1135669645]
+autoplay = &"run"
+libraries/ = SubResource("AnimationLibrary_iqw27")
+
+[node name="CollisionShape2D" parent="." index="2" unique_id=1871703552]
+position = Vector2(0, 2)
+shape = SubResource("CapsuleShape2D_xiusf")
+
+[node name="CollisionShape2D" parent="Hitbox" parent_id_path=PackedInt32Array(1871703553) index="0" unique_id=1871703554]
+position = Vector2(0, 2)
+
+[node name="Holster" parent="." index="4" unique_id=361672200 instance=ExtResource("4_kvn2e")]
+script = ExtResource("5_nncdq")
+scene = ExtResource("7_kvn2e")
+
+[node name="RangeFinder" parent="Holster"]
+collision_mask = 1

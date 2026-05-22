@@ -8,6 +8,14 @@ extends CanvasLayer
 	"meatshield": {
 		"name": "Meatshield",
 		"scene": preload("res://scenes/companions/meatshield_companion.tscn")
+	},
+	"bomber": {
+		"name": "Bomber",
+		"scene": preload("res://scenes/companions/bomber_companion.tscn")
+	},
+	"fullauto": {
+		"name": "Full Auto",
+		"scene": preload("res://scenes/companions/fullauto_companion.tscn")
 	}
 } 
 @export var player: Player

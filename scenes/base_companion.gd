@@ -28,6 +28,12 @@ func _ready() -> void:
 
 	_update_stats()
 
+	match type.to_lower():
+		"bomber":
+			_setup_bomber()
+		"fullauto":
+			_setup_fullauto()
+
 
 func _physics_process(delta: float) -> void:
 	if not follow_target:
@@ -55,6 +61,27 @@ func _update_stats():
 	shot_range = player.shot_range
 	if holster:
 		holster.get_node("RangeFinder/Range").shape.radius = shot_range
+
+	match type.to_lower():
+		"bomber":
+			_apply_bomber_stats()
+		"fullauto":
+			_apply_fullauto_stats()
+
+func _apply_bomber_stats():
+	shot_range = player.shot_range / 2
+	if holster:
+		holster.get_node("RangeFinder/Range").shape.radius = shot_range
+
+func _apply_fullauto_stats():
+	damage = player.damage / 2
+
+func _setup_bomber():
+	holster.scene = preload("res://scenes/projectiles/bomber_projectile.tscn")
+	holster.get_node("Timer").wait_time = 2.0
+
+func _setup_fullauto():
+	pass
 
 func _setup_meatshield():
 	follow_target = player

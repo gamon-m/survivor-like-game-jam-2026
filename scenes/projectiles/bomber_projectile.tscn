@@ -1,0 +1,31 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/projectiles/bomber_projectile.gd" id="1_qmu6d"]
+
+[sub_resource type="Gradient" id="Gradient_6aapk"]
+interpolation_mode = 1
+colors = PackedColorArray(1, 0.5, 0, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_c8fcr"]
+gradient = SubResource("Gradient_6aapk")
+width = 12
+height = 12
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0.06)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_6aapk"]
+radius = 6.0
+
+[node name="BomberProjectile" type="Area2D"]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("1_qmu6d")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = SubResource("GradientTexture2D_c8fcr")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_6aapk")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

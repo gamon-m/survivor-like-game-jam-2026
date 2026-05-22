@@ -1,3 +1,5 @@
+class_name Projectile
+
 extends Area2D
 
 var speed = 200.0

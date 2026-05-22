@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://c2n1wqqbd8fvc" path="res://scenes/enemies/swarmer_enemy.tscn" id="5_fjrip"]
 [ext_resource type="PackedScene" uid="uid://jfbv72tdkpga" path="res://scenes/enemies/tank_enemy.tscn" id="6_smehm"]
 [ext_resource type="PackedScene" uid="uid://ral1wxramf4e" path="res://scenes/holster.tscn" id="8_smehm"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/marksman_enemy.tscn" id="8_ur7pv"]
 
 [sub_resource type="Animation" id="Animation_g2els"]
 length = 0.001
@@ -92,6 +93,12 @@ scene = ExtResource("6_smehm")
 enemy_type = "tank"
 metadata/_custom_type_script = "uid://nvhirvndv85j"
 
+[sub_resource type="Resource" id="Resource_marksman"]
+script = ExtResource("4_fjrip")
+scene = ExtResource("8_ur7pv")
+enemy_type = "marksman"
+metadata/_custom_type_script = "uid://nvhirvndv85j"
+
 [sub_resource type="Curve2D" id="Curve2D_g2els"]
 _data = {
 "points": PackedVector2Array(0, 0, 0, 0, -457, -288, 0, 0, 0, 0, 476, -277, 0, 0, 0, 0, 471, 277, 0, 0, 0, 0, -474, 281, 0, 0, 0, 0, -457, -288)
@@ -131,7 +138,7 @@ position_smoothing_speed = 20.0
 
 [node name="EnemySpawner" type="Node2D" parent="." unique_id=159729331]
 script = ExtResource("3_qhqgy")
-enemy_scenes = Array[ExtResource("4_fjrip")]([SubResource("Resource_fjrip"), SubResource("Resource_smehm"), SubResource("Resource_ur7pv")])
+enemy_scenes = Array[ExtResource("4_fjrip")]([SubResource("Resource_fjrip"), SubResource("Resource_smehm"), SubResource("Resource_ur7pv"), SubResource("Resource_marksman")])
 
 [node name="SpawnPath" type="Path2D" parent="EnemySpawner" unique_id=1400909616]
 curve = SubResource("Curve2D_g2els")
