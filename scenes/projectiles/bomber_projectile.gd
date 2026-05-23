@@ -17,12 +17,16 @@ func _physics_process(delta):
 
 func _on_body_entered(body):
 	var hit_body = body
+	var is_crit = _check_crit()
 	if body.has_method("take_damage"):
-		body.take_damage(damage * 4)
-	_explode(hit_body)
+		var dmg = damage * 4
+		if is_crit:
+			dmg *= 2
+		body.take_damage(dmg)
+	_explode(hit_body, is_crit)
 	queue_free()
 
-func _explode(hit_body):
+func _explode(hit_body, is_crit = false):
 	var space = get_world_2d().direct_space_state
 	var query = PhysicsShapeQueryParameters2D.new()
 	var circle = CircleShape2D.new()
@@ -35,4 +39,10 @@ func _explode(hit_body):
 	for result in results:
 		var body = result.get("collider") as Node
 		if body and body.has_method("take_damage") and body != hit_body:
-			body.take_damage(damage * 2)
+			var dmg = damage * 2
+			if is_crit:
+				dmg *= 2
+			body.take_damage(dmg)
+
+func _check_crit() -> bool:
+	return randf() < crit_chance

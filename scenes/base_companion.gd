@@ -57,7 +57,7 @@ func _process_orbit_movement(delta):
 
 func _update_stats():
 	damage = player.damage
-	crit_chance = 0
+	crit_chance = player.crit_chance
 	shot_range = player.shot_range
 	if holster:
 		holster.get_node("RangeFinder/Range").shape.radius = shot_range
