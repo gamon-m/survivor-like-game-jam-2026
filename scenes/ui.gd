@@ -34,9 +34,13 @@ extends CanvasLayer
 @onready var companion_five_button: Button = $ReplaceCompanionPanel/VBoxContainer/HBoxContainer/Companion5
 @onready var back_button: Button = $ReplaceCompanionPanel/VBoxContainer/BackButton
 
+@onready var pause_overlay: ColorRect = $PauseOverlay
+
 var _character_callable: Callable
 var _stat_callable: Callable
 var _heal_callable: Callable
+var _level_up_index := 0
+var _sacrifice_index := 0
 
 var upgrade_templates = [
 	{
@@ -100,7 +104,60 @@ func _ready() -> void:
 	player.connect("xp_gained", _on_player_xp_gained)
 	player.connect("leveled_up", _on_player_leveled_up)
 	player.connect("health_changed", _on_player_health_changed)
-	
+	pause_overlay.visible = false
+
+func _input(event):
+	if Input.is_action_just_pressed("pause"):
+		if $LevelUpPanel.visible or $ReplaceCompanionPanel.visible:
+			return
+		_toggle_pause()
+		get_viewport().set_input_as_handled()
+
+	if $LevelUpPanel.visible and not $ReplaceCompanionPanel.visible:
+		_handle_level_up_nav(event)
+	elif $ReplaceCompanionPanel.visible:
+		_handle_sacrifice_nav(event)
+
+func _toggle_pause():
+	pause_overlay.visible = not pause_overlay.visible
+	get_tree().paused = pause_overlay.visible
+
+func _handle_level_up_nav(event):
+	var buttons = [character_button, stat_up_button, heal_button]
+	if event.is_action_pressed("move_up"):
+		_level_up_index = (_level_up_index - 1 + buttons.size()) % buttons.size()
+		buttons[_level_up_index].grab_focus()
+		get_viewport().set_input_as_handled()
+	elif event.is_action_pressed("move_down"):
+		_level_up_index = (_level_up_index + 1) % buttons.size()
+		buttons[_level_up_index].grab_focus()
+		get_viewport().set_input_as_handled()
+	elif event.is_action_pressed("confirm"):
+		buttons[_level_up_index].pressed.emit()
+		get_viewport().set_input_as_handled()
+
+func _handle_sacrifice_nav(event):
+	var active_buttons = []
+	for i in range(player.companions.size()):
+		match i:
+			0: active_buttons.append(companion_one_button)
+			1: active_buttons.append(companion_two_button)
+			2: active_buttons.append(companion_three_button)
+			3: active_buttons.append(companion_four_button)
+			4: active_buttons.append(companion_five_button)
+	active_buttons.append(back_button)
+
+	if event.is_action_pressed("move_left") or event.is_action_pressed("move_up"):
+		_sacrifice_index = (_sacrifice_index - 1 + active_buttons.size()) % active_buttons.size()
+		active_buttons[_sacrifice_index].grab_focus()
+		get_viewport().set_input_as_handled()
+	elif event.is_action_pressed("move_right") or event.is_action_pressed("move_down"):
+		_sacrifice_index = (_sacrifice_index + 1) % active_buttons.size()
+		active_buttons[_sacrifice_index].grab_focus()
+		get_viewport().set_input_as_handled()
+	elif event.is_action_pressed("confirm"):
+		active_buttons[_sacrifice_index].pressed.emit()
+		get_viewport().set_input_as_handled()
 
 func _on_player_xp_gained(current, max_xp) -> void:
 	xp_bar.value = current
@@ -134,6 +191,8 @@ func _on_player_leveled_up() -> void:
 	character_button.pressed.connect(_character_callable)
 	stat_up_button.pressed.connect(_stat_callable)
 	heal_button.pressed.connect(_heal_callable)
+	_level_up_index = 0
+	character_button.grab_focus()
 
 func _on_companion_selected(companion_data):
 	if player.companions.size() >= 5:
@@ -153,6 +212,8 @@ func _on_companion_selected(companion_data):
 
 func _populate_sacrifice_buttons():
 	back_button.connect("pressed", _on_sacrifice_back)
+	_sacrifice_index = 0
+	companion_one_button.grab_focus()
 	for index in range(player.companions.size()):
 		match index:
 			0:
@@ -190,6 +251,8 @@ func _on_sacrifice_back():
 	$ReplaceCompanionPanel.visible = false
 	$LevelUpPanel.visible = true
 	pending_companion_data = null
+	_level_up_index = 0
+	character_button.grab_focus()
 
 func _on_stat_selected(upgrade):
 	player.apply_stat(upgrade.stat, upgrade.value)
