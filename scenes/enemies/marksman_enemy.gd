@@ -1,7 +1,7 @@
 extends "res://scenes/base_enemy.gd"
 
 @export var shot_range = 100
-@export var stop_distance = 130
+@export var stop_distance = 100
 @export var bullet_scene: PackedScene
 @export var bullet_speed = 150
 @export var bullet_damage = 10
@@ -13,11 +13,13 @@ func _ready():
 	$Holster/Timer.wait_time = shot_delay
 	$Holster/Timer.start()
 	$Holster.call_deferred("_on_timer_timeout")
-	var shape = $Holster/RangeFinder/Range.shape as CircleShape2D
+	$Holster/RangeFinder/Range.shape = $Holster/RangeFinder/Range.shape.duplicate()
+	var shape = $Holster/RangeFinder/Range.shape
 	if shape:
 		shape.radius = shot_range
 
-func _physics_process(delta):
+		
+func _physics_process(_delta):
 	if !player_reference:
 		return
 
@@ -29,11 +31,14 @@ func _physics_process(delta):
 	else:
 		velocity = Vector2.ZERO
 
-	$AnimationPlayer.play("run")
-	if velocity.x < 0:
-		$Sprite2D.flip_h = true
-	elif velocity.x > 0:
-		$Sprite2D.flip_h = false
+	if velocity == Vector2.ZERO:
+		$AnimationPlayer.play("idle")
+	else:
+		$AnimationPlayer.play("run")
+		if velocity.x < 0:
+			$Sprite2D.flip_h = true
+		elif velocity.x > 0:
+			$Sprite2D.flip_h = false
 
 	move_and_slide()
 

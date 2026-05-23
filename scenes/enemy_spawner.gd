@@ -12,10 +12,10 @@ var level_requirements = {
 }
 
 var spawn_weights = {
-	"chaser": 4,
-	"tank": 2,
+	"chaser": 0,
+	"tank": 0,
 	"marksman": 2,
-	"swarmer": 2,
+	"swarmer": 0,
 }
 
 func _ready() -> void:
@@ -30,7 +30,7 @@ func _on_timer_timeout() -> void:
 	var available = enemy_scenes.filter(func(c): return player_level >= level_requirements.get(c.enemy_type, 99))
 	if available.is_empty():
 		return
-	var enemy_config = _weighted_pick(available)
+	var enemy_config = _weighted_pick(enemy_scenes)
 	var enemy = enemy_config.scene.instantiate()
 
 	spawn_path.progress_ratio = randf()

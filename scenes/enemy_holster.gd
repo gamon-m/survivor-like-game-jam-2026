@@ -3,6 +3,10 @@ extends Node2D
 @export var scene: PackedScene
 @onready var range_finder = $RangeFinder
 
+
+func _ready() -> void:
+	range_finder.collision_mask = 1
+
 func _on_timer_timeout() -> void:
 	var entities_in_range = range_finder.get_overlapping_bodies()
 
