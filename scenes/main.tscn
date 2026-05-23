@@ -6,12 +6,14 @@
 [ext_resource type="Script" uid="uid://dsk3keaftbkl6" path="res://scenes/ui.gd" id="4_jyhfs"]
 [ext_resource type="Script" uid="uid://cu4qee8oe4x8b" path="res://scenes/main.gd" id="5_main"]
 [ext_resource type="PackedScene" uid="uid://b8k2m3xv7q4rn" path="res://scenes/game_over.tscn" id="6_gameover"]
+[ext_resource type="PackedScene" uid="uid://nuyeg0wrsrg3" path="res://scenes/enemies/boss.tscn" id="7_o6xl0"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tefeu"]
 bg_color = Color(1, 0, 0, 1)
 
 [node name="Main" type="Node2D" unique_id=1798292128]
 script = ExtResource("5_main")
+boss_scene = ExtResource("7_o6xl0")
 
 [node name="GroundParallax2D" type="Parallax2D" parent="." unique_id=590339952]
 repeat_size = Vector2(16, 16)
@@ -147,7 +149,7 @@ layout_mode = 2
 size_flags_horizontal = 0
 text = "Back"
 
-[node name="PauseOverlay" type="ColorRect" parent="UI"]
+[node name="PauseOverlay" type="ColorRect" parent="UI" unique_id=955864866]
 visible = false
 anchors_preset = 15
 anchor_right = 1.0
@@ -156,8 +158,8 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.65)
 
-[node name="Label" type="Label" parent="UI/PauseOverlay"]
-anchors_preset = 8
+[node name="Label" type="Label" parent="UI/PauseOverlay" unique_id=1500736745]
+layout_mode = 0
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5

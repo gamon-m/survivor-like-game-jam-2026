@@ -18,7 +18,7 @@ signal health_changed(current, max)
 
 var xp = 0
 var xp_level = 0
-var xp_required = 10
+var xp_required = 1
 
 var stat_levels = {
 	"damage": 0,
@@ -30,7 +30,6 @@ var stat_levels = {
 }
 
 var companions: Array[BaseCompanion] = []
-
 
 func _physics_process(delta: float) -> void:
 	var direction = Input.get_vector("move_left", "move_right", "move_up", "move_down")
@@ -130,4 +129,3 @@ func _find_previous(index: int):
 	if companions[index].type.to_lower() == "meatshield":
 		return _find_previous(index - 1)
 	return companions[index]
-
