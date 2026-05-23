@@ -49,7 +49,6 @@ height = 42.0
 [node name="TankEnemy" unique_id=510154604 instance=ExtResource("1_egecj")]
 speed = 25.0
 enemy_type = "tank"
-base_health = 10
 health_multiplier = 5.0
 xp_multiplier = 3
 contact_damage = 20
