@@ -118,6 +118,8 @@ func _physics_process(_delta: float) -> void:
 func take_damage(amount):
 	hp -= amount
 	health_changed.emit(hp, max_hp)
+	$Sprite2D.modulate = Color.RED
+	create_tween().tween_property($Sprite2D, "modulate", Color.WHITE, 0.1)
 	if hp <= 0:
 		die()
 		return

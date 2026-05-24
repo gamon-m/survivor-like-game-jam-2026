@@ -194,6 +194,8 @@ text = "PAUSED"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
+
 [node name="GameOver" parent="." unique_id=700000001 instance=ExtResource("6_gameover")]
 
 [node name="YouWin" parent="." unique_id=843808619 instance=ExtResource("youwin")]

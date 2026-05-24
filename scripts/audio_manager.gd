@@ -2,9 +2,13 @@ extends Node
 
 var sfx_map: Dictionary = {}
 var audio_players: Array[AudioStreamPlayer2D] = []
+var last_played: Dictionary = {}
 const POOL_SIZE = 10
+const COOLDOWN = 0.1
 
 func _ready():
+	process_mode = Node.PROCESS_MODE_ALWAYS
+
 	sfx_map["shoot"] = preload("res://assets/sfx/shoot.wav")
 	sfx_map["hurt"] = preload("res://assets/sfx/hurt.wav")
 	sfx_map["die"] = preload("res://assets/sfx/die.wav")
@@ -22,6 +26,9 @@ func _ready():
 func play_sfx(name: String, position: Vector2 = Vector2.ZERO, volume_db: float = 0.0):
 	if not sfx_map.has(name):
 		return
+	if Time.get_ticks_msec() - last_played.get(name, 0) < COOLDOWN * 1000:
+		return
+	last_played[name] = Time.get_ticks_msec()
 	for player in audio_players:
 		if not player.playing:
 			player.stream = sfx_map[name]

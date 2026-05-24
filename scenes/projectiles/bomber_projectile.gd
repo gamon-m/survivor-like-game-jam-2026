@@ -11,7 +11,7 @@ var shot_range
 func _physics_process(delta):
 	position += direction * speed * delta
 	range_travelled += (direction * speed * delta).length()
-	if range_travelled > shot_range:
+	if range_travelled > shot_range*2: 
 		_explode(null)
 		queue_free()
 

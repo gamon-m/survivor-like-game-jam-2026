@@ -85,6 +85,7 @@ func _setup_fullauto():
 
 func _setup_meatshield():
 	follow_target = player
+	damage = player.damage
 	get_node("ContactTimer").timeout.connect(_on_contact_timer_timeout)
 	get_node("MeatshieldHitbox").area_entered.connect(_on_hitbox_area_entered)
 	
@@ -95,4 +96,3 @@ func _on_contact_timer_timeout():
 
 func _on_hitbox_area_entered(area: Area2D):
 	pass
-	

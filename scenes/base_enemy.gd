@@ -37,7 +37,16 @@ func _physics_process(_delta: float) -> void:
 
 func take_damage(damage):
 	health -= damage
+	$Sprite2D.modulate = Color.RED
+	create_tween().tween_property($Sprite2D, "modulate", Color.WHITE, 0.1)
+
 	if health <= 0:
+		var particle = preload("res://scenes/enemy_death_particle.tscn").instantiate()
+		particle.global_position = global_position
+		get_tree().current_scene.add_child(particle)
+		particle.emitting = true
+		particle.finished.connect(particle.queue_free)
+
 		queue_free()
 		AudioManager.play_sfx("enemy_die", global_position)
 		if not loot_scene:

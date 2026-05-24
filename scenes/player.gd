@@ -11,7 +11,7 @@ signal health_changed(current, max)
 @export var speed = 100
 @export var health = 100
 @export var max_health = 100
-@export var damage = 10
+@export var damage = 15
 @export var crit_chance = 0.0
 @export var shot_delay = 1.0
 @export var shot_range = 75
@@ -30,6 +30,9 @@ var stat_levels = {
 }
 
 var companions: Array[BaseCompanion] = []
+
+func _ready():
+	$DamageTimer.timeout.connect(_on_iframe_ended)
 
 func _physics_process(_delta: float) -> void:
 	var direction = Input.get_vector("move_left", "move_right", "move_up", "move_down")
@@ -51,6 +54,9 @@ func _on_damage_timer_timeout():
 			take_damage(body.contact_damage)
 			break
 
+func _on_iframe_ended():
+	$Sprite2D.modulate.a = 1.0
+
 func take_damage(amount):
 	if $DamageTimer.time_left > 0:
 		return
@@ -60,11 +66,13 @@ func take_damage(amount):
 	AudioManager.play_sfx("hurt")
 
 	$DamageTimer.start()
+	$Sprite2D.modulate.a = 0.5
 
 	if health <= 0:
 		health = 0
 		died.emit()
 		AudioManager.play_sfx("die")
+		$Sprite2D.modulate.a = 1.0
 		$CollisionShape2D.set_deferred("disabled", true)
 		hide()
 		get_tree().paused = true
@@ -103,6 +111,8 @@ func apply_stat(stat_name: String, value: float) -> void:
 			speed += int(value)
 
 	stat_levels[stat_name] += 1
+	for companion in companions:
+		companion._update_stats()
 
 func get_stat_level(stat_name: String) -> int:
 	return stat_levels.get(stat_name, 0)
