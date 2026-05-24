@@ -1,6 +1,6 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://b7l5xnrjogmnw"]
 
-[ext_resource type="Script" path="res://scenes/projectiles/bomber_projectile.gd" id="1_qmu6d"]
+[ext_resource type="Script" uid="uid://dnvim36akjovv" path="res://scenes/projectiles/bomber_projectile.gd" id="1_qmu6d"]
 
 [sub_resource type="Gradient" id="Gradient_6aapk"]
 interpolation_mode = 1
@@ -17,15 +17,15 @@ fill_to = Vector2(0.5, 0.06)
 [sub_resource type="CircleShape2D" id="CircleShape2D_6aapk"]
 radius = 6.0
 
-[node name="BomberProjectile" type="Area2D"]
+[node name="BomberProjectile" type="Area2D" unique_id=2078669917]
 collision_layer = 0
-collision_mask = 2
+collision_mask = 6
 script = ExtResource("1_qmu6d")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1591774828]
 texture = SubResource("GradientTexture2D_c8fcr")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1320502241]
 shape = SubResource("CircleShape2D_6aapk")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]

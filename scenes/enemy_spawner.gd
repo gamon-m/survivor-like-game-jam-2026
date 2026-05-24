@@ -36,6 +36,7 @@ func _on_timer_timeout() -> void:
 	spawn_path.progress_ratio = randf()
 	enemy.global_position = spawn_path.global_position
 	enemy.player_reference = get_parent()
+	enemy.health_multiplier *= 1.0 + player_level * 0.1
 
 	container.add_child(enemy)
 

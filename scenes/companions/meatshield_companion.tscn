@@ -8,6 +8,7 @@ radius = 16.0
 height = 32.0
 
 [node name="MeatshieldCompanion" unique_id=1239355510 instance=ExtResource("1_g076x")]
+collision_layer = 1
 type = "Meatshield"
 
 [node name="Sprite2D" parent="." index="0" unique_id=1413762317]
@@ -20,7 +21,7 @@ autostart = true
 
 [node name="MeatshieldHitbox" type="Area2D" parent="." index="4" unique_id=1427911901]
 collision_layer = 0
-collision_mask = 2
+collision_mask = 6
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="MeatshieldHitbox" index="0" unique_id=374485213]
 position = Vector2(0, 3)

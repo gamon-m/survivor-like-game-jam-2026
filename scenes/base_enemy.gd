@@ -39,6 +39,8 @@ func take_damage(damage):
 	health -= damage
 	if health <= 0:
 		queue_free()
+		if not loot_scene:
+			return
 		var xp_gem = loot_scene.instantiate() as Area2D
 		xp_gem.global_position = global_position
 		xp_gem.xp_amount = xp_gem.xp_amount * xp_multiplier

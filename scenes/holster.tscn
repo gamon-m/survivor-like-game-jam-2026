@@ -16,7 +16,7 @@ autostart = true
 
 [node name="RangeFinder" type="Area2D" parent="." unique_id=808216003]
 collision_layer = 0
-collision_mask = 2
+collision_mask = 6
 
 [node name="Range" type="CollisionShape2D" parent="RangeFinder" unique_id=1516682367]
 shape = SubResource("CircleShape2D_fjrip")

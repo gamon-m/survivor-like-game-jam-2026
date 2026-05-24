@@ -14,6 +14,7 @@ collision_layer = 2
 collision_mask = 2
 script = ExtResource("1_n1jr3")
 loot_scene = ExtResource("2_sw3va")
+base_health = 5
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1952026308]
 

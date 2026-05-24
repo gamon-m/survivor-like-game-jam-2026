@@ -18,7 +18,7 @@ signal health_changed(current, max)
 
 var xp = 0
 var xp_level = 0
-var xp_required = 1
+var xp_required = 10
 
 var stat_levels = {
 	"damage": 0,
@@ -31,7 +31,7 @@ var stat_levels = {
 
 var companions: Array[BaseCompanion] = []
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	var direction = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	velocity = direction * speed
 	move_and_slide()
@@ -77,7 +77,7 @@ func gain_xp(amount):
 
 func level_up():
 	xp_level += 1
-	xp_required = int(xp_required * 1.5)
+	xp_required = int(xp_required * 1.3)
 	leveled_up.emit()
 
 func apply_stat(stat_name: String, value: float) -> void:

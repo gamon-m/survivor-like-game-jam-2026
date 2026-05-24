@@ -50,7 +50,7 @@ height = 42.0
 speed = 25.0
 enemy_type = "tank"
 health_multiplier = 5.0
-xp_multiplier = 3
+xp_multiplier = 4
 contact_damage = 20
 
 [node name="Sprite2D" parent="." index="0" unique_id=1952026308]

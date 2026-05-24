@@ -68,8 +68,8 @@ radius = 53.338543
 radius = 52.086468
 
 [node name="Boss" type="CharacterBody2D" unique_id=431371588]
-collision_layer = 2
-collision_mask = 2
+collision_layer = 4
+collision_mask = 0
 script = ExtResource("1_3uc6t")
 bullet_scene = ExtResource("2_ub7yk")
 

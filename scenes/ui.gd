@@ -20,6 +20,8 @@ extends CanvasLayer
 } 
 @export var player: Player
 @onready var xp_bar: ProgressBar = $ProgressBar
+@onready var level_label: Label = $ProgressBar/LevelLabel
+@onready var boss_health_bar: ProgressBar = $BossHealthBar
 @onready var health_bar: ProgressBar = $HealthBar
 @onready var level_up_label: Label = $LevelUpPanel/VBoxContainer/Label
 @onready var character_button: Button = $LevelUpPanel/VBoxContainer/Button
@@ -97,6 +99,7 @@ func _ready() -> void:
 
 	if !player:
 		return
+	level_label.text = "Level %d" % player.xp_level
 
 	health_bar.value = player.health
 	health_bar.max_value = player.max_health
@@ -162,10 +165,25 @@ func _handle_sacrifice_nav(event):
 func _on_player_xp_gained(current, max_xp) -> void:
 	xp_bar.value = current
 	xp_bar.max_value = max_xp
+	level_label.text = "Level %d" % player.xp_level
 
 func _on_player_health_changed(current, max_health) -> void:
 	health_bar.max_value = max_health
 	health_bar.value = current
+
+func show_boss_hp(max_hp: int) -> void:
+	xp_bar.visible = false
+	boss_health_bar.max_value = max_hp
+	boss_health_bar.value = max_hp
+	boss_health_bar.visible = true
+
+func hide_boss_hp() -> void:
+	boss_health_bar.visible = false
+	xp_bar.visible = true
+
+func set_boss_hp(current: int, max_hp: int) -> void:
+	boss_health_bar.max_value = max_hp
+	boss_health_bar.value = current
 
 func _on_player_leveled_up() -> void:
 	level_up_label.text = "Choose your reward!"

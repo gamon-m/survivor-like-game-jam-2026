@@ -19,7 +19,7 @@ func _on_body_entered(body):
 	var hit_body = body
 	var is_crit = _check_crit()
 	if body.has_method("take_damage"):
-		var dmg = damage * 4
+		var dmg = damage * 2
 		if is_crit:
 			dmg *= 2
 		body.take_damage(dmg)
@@ -39,10 +39,9 @@ func _explode(hit_body, is_crit = false):
 	for result in results:
 		var body = result.get("collider") as Node
 		if body and body.has_method("take_damage") and body != hit_body:
-			var dmg = damage * 2
 			if is_crit:
-				dmg *= 2
-			body.take_damage(dmg)
+				damage *= 2
+			body.take_damage(damage)
 
 func _check_crit() -> bool:
 	return randf() < crit_chance

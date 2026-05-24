@@ -47,10 +47,11 @@ radius = 6.0
 height = 22.0
 
 [node name="SwarmerEnemy" unique_id=510154604 instance=ExtResource("1_b2cjt")]
+collision_mask = 0
 speed = 150.0
 enemy_type = "swarmer"
-base_health = 10
-health_multiplier = 0.5
+health_multiplier = 0.1
+xp_multiplier = 2
 contact_damage = 5
 
 [node name="Sprite2D" parent="." index="0" unique_id=1952026308]

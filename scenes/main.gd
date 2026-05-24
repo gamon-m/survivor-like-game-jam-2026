@@ -4,6 +4,7 @@ extends Node2D
 @onready var enemy_spawner: Timer = $Player/EnemySpawner/SpawnTimer
 @onready var camera: Camera2D = $Player/Camera2D
 @onready var enemies_container: Node2D = $EnemiesContainer
+@onready var ui: CanvasLayer = $UI
 
 @export var boss_scene: PackedScene
 
@@ -15,7 +16,7 @@ func _ready() -> void:
 	player.leveled_up.connect(_on_player_leveled_up)
 
 func _on_player_leveled_up() -> void:
-	if player.xp_level == 1:
+	if player.xp_level == 15:
 		call_deferred("_start_boss_fight")
 
 func _start_boss_fight():
@@ -31,4 +32,14 @@ func _start_boss_fight():
 	boss.global_position = player.global_position
 	boss.global_position.y -= 150
 	boss.player_reference = player
+	boss.health_changed.connect(ui.set_boss_hp)
+	boss.tree_exited.connect(_on_boss_died)
 	add_child(boss)
+
+	ui.show_boss_hp(boss.max_hp)
+
+func _on_boss_died():
+	ui.hide_boss_hp()
+	for enemy in enemies_container.get_children():
+		enemy.queue_free()
+	$YouWin.show_you_win()
