@@ -57,12 +57,14 @@ func take_damage(amount):
 
 	health -= amount
 	health_changed.emit(health, max_health)
+	AudioManager.play_sfx("hurt")
 
 	$DamageTimer.start()
 
 	if health <= 0:
 		health = 0
 		died.emit()
+		AudioManager.play_sfx("die")
 		$CollisionShape2D.set_deferred("disabled", true)
 		hide()
 		get_tree().paused = true
@@ -79,6 +81,7 @@ func level_up():
 	xp_level += 1
 	xp_required = int(xp_required * 1.3)
 	leveled_up.emit()
+	AudioManager.play_sfx("level_up")
 
 func apply_stat(stat_name: String, value: float) -> void:
 	match stat_name:

@@ -33,3 +33,4 @@ func shoot(target):
 	projectile.shot_range = get_parent().shot_range
 
 	get_tree().current_scene.add_child(projectile)
+	AudioManager.play_sfx("shoot", global_position, -10.0)

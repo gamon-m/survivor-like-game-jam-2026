@@ -4,6 +4,7 @@ func _ready() -> void:
 	visible = false
 
 func show_game_over() -> void:
+	AudioManager.play_sfx("game_over")
 	visible = true
 	get_tree().paused = true
 

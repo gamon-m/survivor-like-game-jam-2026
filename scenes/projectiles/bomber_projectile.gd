@@ -27,6 +27,7 @@ func _on_body_entered(body):
 	queue_free()
 
 func _explode(hit_body, is_crit = false):
+	AudioManager.play_sfx("explosion", global_position, -10.0)
 	var space = get_world_2d().direct_space_state
 	var query = PhysicsShapeQueryParameters2D.new()
 	var circle = CircleShape2D.new()

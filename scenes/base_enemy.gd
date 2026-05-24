@@ -39,6 +39,7 @@ func take_damage(damage):
 	health -= damage
 	if health <= 0:
 		queue_free()
+		AudioManager.play_sfx("enemy_die", global_position)
 		if not loot_scene:
 			return
 		var xp_gem = loot_scene.instantiate() as Area2D

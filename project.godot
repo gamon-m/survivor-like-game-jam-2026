@@ -73,6 +73,10 @@ pause={
 
 3d/physics_engine="Jolt Physics"
 
+[autoload]
+
+AudioManager="*res://scripts/audio_manager.gd"
+
 [rendering]
 
 textures/canvas_textures/default_texture_filter=0
