@@ -30,4 +30,5 @@ func _start_boss_fight():
 	boss = boss_scene.instantiate()
 	boss.global_position = player.global_position
 	boss.global_position.y -= 150
+	boss.player_reference = player
 	add_child(boss)

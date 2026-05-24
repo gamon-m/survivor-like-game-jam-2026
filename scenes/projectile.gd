@@ -6,7 +6,7 @@ var speed = 200.0
 var direction = Vector2.RIGHT
 var range_travelled = 0.0
 var damage
-var crit_chance
+var crit_chance = 0.0
 var shot_range
 
 func _physics_process(delta: float) -> void:
