@@ -41,7 +41,7 @@ size_flags_horizontal = 4
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 4
-text = "COMPANION SURVIVORS"
+text = "COMPANION RUSH"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -122,7 +122,7 @@ layout_mode = 2
 text = "Back"
 
 [node name="BestTimeLabel" type="Label" parent="." unique_id=976139751]
-anchors_preset = 7
+layout_mode = 0
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5

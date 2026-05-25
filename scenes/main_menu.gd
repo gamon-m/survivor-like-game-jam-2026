@@ -7,6 +7,8 @@ func _ready():
 	AudioManager.play_music("title")
 	_setup_theme()
 	$SettingsPanel.hide()
+	if OS.has_feature("web"):
+		$VBoxContainer/ExitButton.hide()
 	$VBoxContainer/PlayButton.grab_focus()
 
 func _setup_theme():
@@ -41,7 +43,7 @@ func _input(event):
 		_handle_main_nav(event)
 
 func _handle_main_nav(event):
-	var buttons = [$VBoxContainer/PlayButton, $VBoxContainer/SettingsButton, $VBoxContainer/ExitButton]
+	var buttons = $VBoxContainer.get_children().filter(func(c): return c is Button and c.visible)
 	var vp = get_viewport()
 	if event.is_action_pressed("move_up"):
 		_main_index = (_main_index - 1 + buttons.size()) % buttons.size()

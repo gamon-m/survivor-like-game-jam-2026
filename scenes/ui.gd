@@ -384,7 +384,7 @@ func _generate_random_upgrade() -> Dictionary:
 	var display_old = _format_stat(template.stat, old_val)
 	var display_new = _format_stat(template.stat, new_val)
 	
-	var label = "%s (%s → %s)" % [template.label, display_old, display_new]
+	var label = "%s (%s > %s)" % [template.label, display_old, display_new]
 	if rarity == "rare":
 		label = "RARE!!! " + label
 

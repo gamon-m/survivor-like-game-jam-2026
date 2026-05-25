@@ -18,7 +18,7 @@ signal health_changed(current, max)
 
 var xp = 0
 var xp_level = 0
-var xp_required = 1
+var xp_required = 10
 
 var stat_levels = {
 	"damage": 0,
