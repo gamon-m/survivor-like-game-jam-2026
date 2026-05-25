@@ -36,7 +36,7 @@ func _physics_process(_delta: float) -> void:
 			target.take_damage(contact_damage)			
 
 func take_damage(damage):
-	AudioManager.play_sfx("enemy_die", global_position)
+	AudioManager.play_sfx("enemy_die", global_position, -6.0)
 	health -= damage
 	$Sprite2D.modulate = Color.RED
 	create_tween().tween_property($Sprite2D, "modulate", Color.WHITE, 0.1)

@@ -5,5 +5,5 @@ extends Area2D
 func _on_body_entered(body: Node2D) -> void:
 	if body.has_method("gain_xp"):
 		body.gain_xp(xp_amount)
-		AudioManager.play_sfx("xp")
+		AudioManager.play_sfx("xp", global_position, 1.0)
 		queue_free()
