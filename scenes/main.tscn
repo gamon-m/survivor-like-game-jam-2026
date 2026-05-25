@@ -129,6 +129,7 @@ layout_mode = 2
 size_flags_vertical = 3
 
 [node name="ReplaceCompanionPanel" type="Panel" parent="UI" unique_id=776459277]
+visible = false
 custom_minimum_size = Vector2(750, 150)
 anchors_preset = 8
 anchor_left = 0.5

@@ -11,20 +11,11 @@ func _ready() -> void:
 	_spawn_terrain()
 
 func _load_textures():
-	var dir = DirAccess.open(textures_folder)
-	if not dir:
-		return
-
-	dir.list_dir_begin()
-	var file = dir.get_next()
-	while file != "":
-		if file.ends_with(".png"):
-			var path = textures_folder.path_join(file)
-			var texture = load(path)
-			if texture is Texture2D:
-				textures.append(texture)
-		file = dir.get_next()
-	dir.list_dir_end()
+	for i in range(6):
+		var path = textures_folder.path_join("ground%d.png" % i)
+		var texture = load(path)
+		if texture is Texture2D:
+			textures.append(texture)
 
 func _pick_weighted() -> Texture2D:
 	var total := ground0_weight + textures.size() - 1
