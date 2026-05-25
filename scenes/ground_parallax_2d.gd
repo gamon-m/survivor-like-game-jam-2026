@@ -2,13 +2,13 @@ extends Parallax2D
 
 @export var textures_folder = "res://assets/environment/ground"
 @export var terrain_area = Vector2(1000, 1000)
+@export var ground0_weight: int = 10
 
 var textures: Array[Texture2D]
 
 func _ready() -> void:
-	# _load_textures()
-	# _spawn_terrain()
-	pass
+	_load_textures()
+	_spawn_terrain()
 
 func _load_textures():
 	var dir = DirAccess.open(textures_folder)
@@ -26,13 +26,23 @@ func _load_textures():
 		file = dir.get_next()
 	dir.list_dir_end()
 
-func _spawn_terrain():
-	var cell_size = textures.front().get_height()
-	var image = Image.create(terrain_area.x, terrain_area.y, false, Image.FORMAT_RGBA8)
+func _pick_weighted() -> Texture2D:
+	var total := ground0_weight + textures.size() - 1
+	var r = randi() % total
+	if r < ground0_weight:
+		return textures[0]
+	var idx = 1 + (r - ground0_weight)
+	return textures[idx]
 
-	for x in range(0, terrain_area.x, cell_size):
-		for y in range(0, terrain_area.y, cell_size):
-			var texture = textures.pick_random()
+func _spawn_terrain():
+	if textures.is_empty():
+		return
+	var cell_size = textures.front().get_height()
+	var image = Image.create(int(terrain_area.x), int(terrain_area.y), false, Image.FORMAT_RGBA8)
+
+	for x in range(0, int(terrain_area.x), cell_size):
+		for y in range(0, int(terrain_area.y), cell_size):
+			var texture = _pick_weighted()
 			var texture_image = texture.get_image()
 			texture_image.convert(Image.FORMAT_RGBA8)
 			image.blit_rect(texture_image, Rect2i(0, 0, cell_size, cell_size), Vector2i(x, y))
