@@ -8,6 +8,7 @@ const COOLDOWN = 0.1
 
 var bgm_player: AudioStreamPlayer
 var music_volume_db: float = -20.0
+var _music_loops: bool = false
 
 func _ready():
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -15,6 +16,7 @@ func _ready():
 	bgm_player = AudioStreamPlayer.new()
 	bgm_player.process_mode = Node.PROCESS_MODE_ALWAYS
 	bgm_player.volume_db = music_volume_db
+	bgm_player.finished.connect(_on_music_finished)
 	add_child(bgm_player)
 
 	sfx_map["shoot"] = preload("res://assets/sfx/shoot.wav")
@@ -32,6 +34,7 @@ func _ready():
 		audio_players.append(player)
 
 func play_music(key: String, volume_db: float = music_volume_db):
+	_music_loops = key != "victory"
 	var path: String
 	match key:
 		"main":
@@ -46,8 +49,13 @@ func play_music(key: String, volume_db: float = music_volume_db):
 	bgm_player.volume_db = volume_db
 	bgm_player.play()
 
+func _on_music_finished():
+	if _music_loops:
+		bgm_player.play()
+
 func stop_music():
 	bgm_player.stop()
+	_music_loops = false
 
 func play_sfx(name: String, position: Vector2 = Vector2.ZERO, volume_db: float = 0.0):
 	if not sfx_map.has(name):

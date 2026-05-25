@@ -58,7 +58,6 @@ var attack_data = {
 var hp
 var phase
 var boss_state
-var spawn_timer: Timer
 
 var cycle_phase: CyclePhase
 var burst_remaining: int
@@ -82,13 +81,6 @@ func _ready() -> void:
 	rapid_timer = Timer.new()
 	rapid_timer.timeout.connect(_on_rapid_timer_timeout)
 	add_child(rapid_timer)
-
-	spawn_timer = Timer.new()
-	spawn_timer.wait_time = phase_data[phase]["enemy_spawn_delay"]
-	spawn_timer.timeout.connect(_on_spawn_timer_timeout)
-	add_child(spawn_timer)
-	spawn_timer.start()
-
 
 func _physics_process(_delta: float) -> void:
 	if not player_reference: return
@@ -152,6 +144,7 @@ func _on_cycle_timer_timeout() -> void:
 func _enter_move():
 	cycle_phase = CyclePhase.MOVE
 	boss_state = BossState.MOVE
+	_spawn_enemies()
 	cycle_timer.start(attack_data["move_duration"])
 
 
@@ -204,7 +197,7 @@ func _handle_burst_tick():
 		_enter_pause(_enter_move)
 
 
-func _on_spawn_timer_timeout() -> void:
+func _spawn_enemies() -> void:
 	var types = phase_data[phase]["enemy_types"]
 	var counts = phase_data[phase]["enemy_count"]
 	var count = randi_range(counts["min"], counts["max"])
@@ -214,8 +207,6 @@ func _on_spawn_timer_timeout() -> void:
 
 
 func _update_phase_timers():
-	spawn_timer.wait_time = phase_data[phase]["enemy_spawn_delay"]
-	spawn_timer.start()
 	attack_index = 0
 
 
