@@ -6,8 +6,16 @@ var last_played: Dictionary = {}
 const POOL_SIZE = 10
 const COOLDOWN = 0.1
 
+var bgm_player: AudioStreamPlayer
+var music_volume_db: float = -20.0
+
 func _ready():
 	process_mode = Node.PROCESS_MODE_ALWAYS
+
+	bgm_player = AudioStreamPlayer.new()
+	bgm_player.process_mode = Node.PROCESS_MODE_ALWAYS
+	bgm_player.volume_db = music_volume_db
+	add_child(bgm_player)
 
 	sfx_map["shoot"] = preload("res://assets/sfx/shoot.wav")
 	sfx_map["hurt"] = preload("res://assets/sfx/hurt.wav")
@@ -22,6 +30,24 @@ func _ready():
 		var player = AudioStreamPlayer2D.new()
 		add_child(player)
 		audio_players.append(player)
+
+func play_music(key: String, volume_db: float = music_volume_db):
+	var path: String
+	match key:
+		"main":
+			path = "res://assets/music/xDeviruchi - Mysterious Dungeon.wav"
+		"boss":
+			path = "res://assets/music/xDeviruchi - Decisive Battle (Loop).wav"
+		"victory":
+			path = "res://assets/music/xDeviruchi - Decisive Battle (End).wav"
+		_:
+			return
+	bgm_player.stream = load(path)
+	bgm_player.volume_db = volume_db
+	bgm_player.play()
+
+func stop_music():
+	bgm_player.stop()
 
 func play_sfx(name: String, position: Vector2 = Vector2.ZERO, volume_db: float = 0.0):
 	if not sfx_map.has(name):
