@@ -20,7 +20,7 @@ func _on_player_died() -> void:
 	$GameOver.show_game_over()
 
 func _on_player_leveled_up() -> void:
-	if player.xp_level == 1:
+	if player.xp_level == 15:
 		call_deferred("_start_boss_fight")
 
 func _start_boss_fight():
