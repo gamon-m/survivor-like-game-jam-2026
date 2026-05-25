@@ -39,13 +39,16 @@ extends CanvasLayer
 @onready var pause_overlay: ColorRect = $PauseOverlay
 @onready var time_label: Label = $TimeLabel
 
+var companion_buttons: Array[Button]
+var _sacrifice_companion_idx := 0
+var _sacrifice_on_back := false
+
 var _elapsed_time: float = 0.0
 var _pause_index := 0
 var _character_callable: Callable
 var _stat_callable: Callable
 var _heal_callable: Callable
 var _level_up_index := 0
-var _sacrifice_index := 0
 
 var upgrade_templates = [
 	{
@@ -170,10 +173,10 @@ func _toggle_pause():
 	get_tree().paused = pause_overlay.visible
 	if pause_overlay.visible:
 		_pause_index = 0
-		$PauseOverlay/VBoxContainer/ResumeButton.grab_focus()
+		$PauseOverlay/Panel/VBoxContainer/ResumeButton.grab_focus()
 
 func _handle_pause_nav(event):
-	var buttons = [$PauseOverlay/VBoxContainer/ResumeButton, $PauseOverlay/VBoxContainer/MainMenuButton]
+	var buttons = [$PauseOverlay/Panel/VBoxContainer/ResumeButton, $PauseOverlay/Panel/VBoxContainer/MainMenuButton]
 	var vp = get_viewport()
 	if event.is_action_pressed("move_up"):
 		_pause_index = (_pause_index - 1 + buttons.size()) % buttons.size()
@@ -209,27 +212,33 @@ func _handle_level_up_nav(event):
 		get_viewport().set_input_as_handled()
 
 func _handle_sacrifice_nav(event):
-	var active_buttons = []
-	for i in range(player.companions.size()):
-		match i:
-			0: active_buttons.append(companion_one_button)
-			1: active_buttons.append(companion_two_button)
-			2: active_buttons.append(companion_three_button)
-			3: active_buttons.append(companion_four_button)
-			4: active_buttons.append(companion_five_button)
-	active_buttons.append(back_button)
-
-	if event.is_action_pressed("move_left") or event.is_action_pressed("move_up"):
-		_sacrifice_index = (_sacrifice_index - 1 + active_buttons.size()) % active_buttons.size()
-		active_buttons[_sacrifice_index].grab_focus()
-		get_viewport().set_input_as_handled()
-	elif event.is_action_pressed("move_right") or event.is_action_pressed("move_down"):
-		_sacrifice_index = (_sacrifice_index + 1) % active_buttons.size()
-		active_buttons[_sacrifice_index].grab_focus()
-		get_viewport().set_input_as_handled()
+	var vp = get_viewport()
+	if event.is_action_pressed("move_left"):
+		if not _sacrifice_on_back:
+			_sacrifice_companion_idx = (_sacrifice_companion_idx - 1 + player.companions.size()) % player.companions.size()
+			companion_buttons[_sacrifice_companion_idx].grab_focus()
+		if vp: vp.set_input_as_handled()
+	elif event.is_action_pressed("move_right"):
+		if not _sacrifice_on_back:
+			_sacrifice_companion_idx = (_sacrifice_companion_idx + 1) % player.companions.size()
+			companion_buttons[_sacrifice_companion_idx].grab_focus()
+		if vp: vp.set_input_as_handled()
+	elif event.is_action_pressed("move_up"):
+		if _sacrifice_on_back:
+			_sacrifice_on_back = false
+			companion_buttons[_sacrifice_companion_idx].grab_focus()
+		if vp: vp.set_input_as_handled()
+	elif event.is_action_pressed("move_down"):
+		if not _sacrifice_on_back:
+			_sacrifice_on_back = true
+			back_button.grab_focus()
+		if vp: vp.set_input_as_handled()
 	elif event.is_action_pressed("confirm"):
-		active_buttons[_sacrifice_index].pressed.emit()
-		get_viewport().set_input_as_handled()
+		if _sacrifice_on_back:
+			back_button.pressed.emit()
+		else:
+			companion_buttons[_sacrifice_companion_idx].pressed.emit()
+		if vp: vp.set_input_as_handled()
 
 func _on_player_xp_gained(current, max_xp) -> void:
 	xp_bar.value = current
@@ -299,25 +308,15 @@ func _on_companion_selected(companion_data):
 
 func _populate_sacrifice_buttons():
 	back_button.connect("pressed", _on_sacrifice_back)
-	_sacrifice_index = 0
-	companion_one_button.grab_focus()
+	companion_buttons = []
+	_sacrifice_companion_idx = 0
+	_sacrifice_on_back = false
+	var all_buttons = [companion_one_button, companion_two_button, companion_three_button, companion_four_button, companion_five_button]
 	for index in range(player.companions.size()):
-		match index:
-			0:
-				companion_one_button.text = player.companions[index].type
-				companion_one_button.connect("pressed", _on_sacrifice_selected.bind(index))
-			1:
-				companion_two_button.text = player.companions[index].type
-				companion_two_button.connect("pressed", _on_sacrifice_selected.bind(index))
-			2:
-				companion_three_button.text = player.companions[index].type
-				companion_three_button.connect("pressed", _on_sacrifice_selected.bind(index))
-			3: 
-				companion_four_button.text = player.companions[index].type
-				companion_four_button.connect("pressed", _on_sacrifice_selected.bind(index))
-			4:
-				companion_five_button.text = player.companions[index].type
-				companion_five_button.connect("pressed", _on_sacrifice_selected.bind(index))
+		companion_buttons.append(all_buttons[index])
+		companion_buttons[index].text = player.companions[index].type
+		companion_buttons[index].connect("pressed", _on_sacrifice_selected.bind(index))
+	companion_buttons[0].grab_focus()
 
 func _on_sacrifice_selected(index):
 	var companion_position = player.companions[index].global_position

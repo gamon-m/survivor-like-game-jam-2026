@@ -36,6 +36,7 @@ func _physics_process(_delta: float) -> void:
 			target.take_damage(contact_damage)			
 
 func take_damage(damage):
+	AudioManager.play_sfx("enemy_die", global_position)
 	health -= damage
 	$Sprite2D.modulate = Color.RED
 	create_tween().tween_property($Sprite2D, "modulate", Color.WHITE, 0.1)
@@ -48,8 +49,8 @@ func take_damage(damage):
 		particle.finished.connect(particle.queue_free)
 
 		queue_free()
-		AudioManager.play_sfx("enemy_die", global_position)
 		if not loot_scene:
+			return
 			return
 		var xp_gem = loot_scene.instantiate() as Area2D
 		xp_gem.global_position = global_position

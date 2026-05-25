@@ -129,8 +129,7 @@ layout_mode = 2
 size_flags_vertical = 3
 
 [node name="ReplaceCompanionPanel" type="Panel" parent="UI" unique_id=776459277]
-visible = false
-custom_minimum_size = Vector2(500, 150)
+custom_minimum_size = Vector2(750, 150)
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -195,47 +194,52 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.65)
 
-[node name="Label" type="Label" parent="UI/PauseOverlay" unique_id=1500736745]
-layout_mode = 0
+[node name="Panel" type="Panel" parent="UI/PauseOverlay" unique_id=1745897418]
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 1
+anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/PauseOverlay/Panel" unique_id=334217985]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="UI/PauseOverlay/Panel/VBoxContainer" unique_id=1500736745]
+layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 text = "PAUSED"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="UI/PauseOverlay" unique_id=334217985]
-layout_mode = 0
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -100.0
-offset_top = 10.0
-offset_right = 100.0
-offset_bottom = 130.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="ResumeButton" type="Button" parent="UI/PauseOverlay/VBoxContainer" unique_id=601424436]
+[node name="ResumeButton" type="Button" parent="UI/PauseOverlay/Panel/VBoxContainer" unique_id=601424436]
 layout_mode = 2
-size_flags_horizontal = 4
 size_flags_vertical = 3
 text = "Resume"
 
-[node name="MainMenuButton" type="Button" parent="UI/PauseOverlay/VBoxContainer" unique_id=1241623776]
+[node name="MainMenuButton" type="Button" parent="UI/PauseOverlay/Panel/VBoxContainer" unique_id=1241623776]
 layout_mode = 2
-size_flags_horizontal = 4
 size_flags_vertical = 3
 text = "Main Menu"
 
 [node name="GameOver" parent="." unique_id=700000001 instance=ExtResource("6_gameover")]
+visible = false
 
 [node name="YouWin" parent="." unique_id=843808619 instance=ExtResource("youwin")]
+visible = false
 
-[connection signal="pressed" from="UI/PauseOverlay/VBoxContainer/ResumeButton" to="UI" method="_on_pause_resume_pressed"]
-[connection signal="pressed" from="UI/PauseOverlay/VBoxContainer/MainMenuButton" to="UI" method="_on_pause_main_menu_pressed"]
+[connection signal="pressed" from="UI/PauseOverlay/Panel/VBoxContainer/ResumeButton" to="UI" method="_on_pause_resume_pressed"]
+[connection signal="pressed" from="UI/PauseOverlay/Panel/VBoxContainer/MainMenuButton" to="UI" method="_on_pause_main_menu_pressed"]
