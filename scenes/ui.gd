@@ -38,6 +38,7 @@ extends CanvasLayer
 
 @onready var pause_overlay: ColorRect = $PauseOverlay
 
+var _pause_index := 0
 var _character_callable: Callable
 var _stat_callable: Callable
 var _heal_callable: Callable
@@ -93,7 +94,20 @@ var rarity_weights = {"common": 80, "rare": 20}
 var disable_range_up = false
 var pending_companion_data
 
+func _setup_font():
+	var font = FontFile.new()
+	font.font_data = load("res://assets/monogram.ttf")
+	var custom_theme = Theme.new()
+	custom_theme.default_font = font
+	custom_theme.default_font_size = 20
+	custom_theme.set_font_size("font_size", "Label", 20)
+	custom_theme.set_font_size("font_size", "Button", 20)
+	for child in get_children():
+		if child is Control:
+			child.theme = custom_theme
+
 func _ready() -> void:
+	_setup_font()
 	xp_bar.value = 0
 	xp_bar.max_value = 100
 
@@ -110,6 +124,13 @@ func _ready() -> void:
 	pause_overlay.visible = false
 
 func _input(event):
+	if pause_overlay.visible:
+		_handle_pause_nav(event)
+		if event.is_action_pressed("pause"):
+			_toggle_pause()
+			get_viewport().set_input_as_handled()
+		return
+
 	if Input.is_action_just_pressed("pause"):
 		if $LevelUpPanel.visible or $ReplaceCompanionPanel.visible:
 			return
@@ -124,6 +145,31 @@ func _input(event):
 func _toggle_pause():
 	pause_overlay.visible = not pause_overlay.visible
 	get_tree().paused = pause_overlay.visible
+	if pause_overlay.visible:
+		_pause_index = 0
+		$PauseOverlay/VBoxContainer/ResumeButton.grab_focus()
+
+func _handle_pause_nav(event):
+	var buttons = [$PauseOverlay/VBoxContainer/ResumeButton, $PauseOverlay/VBoxContainer/MainMenuButton]
+	var vp = get_viewport()
+	if event.is_action_pressed("move_up"):
+		_pause_index = (_pause_index - 1 + buttons.size()) % buttons.size()
+		buttons[_pause_index].grab_focus()
+		if vp: vp.set_input_as_handled()
+	elif event.is_action_pressed("move_down"):
+		_pause_index = (_pause_index + 1) % buttons.size()
+		buttons[_pause_index].grab_focus()
+		if vp: vp.set_input_as_handled()
+	elif event.is_action_pressed("confirm"):
+		buttons[_pause_index].pressed.emit()
+		if vp: vp.set_input_as_handled()
+
+func _on_pause_resume_pressed():
+	_toggle_pause()
+
+func _on_pause_main_menu_pressed():
+	get_tree().paused = false
+	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
 
 func _handle_level_up_nav(event):
 	var buttons = [character_button, stat_up_button, heal_button]

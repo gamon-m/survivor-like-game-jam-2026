@@ -10,6 +10,13 @@ var bgm_player: AudioStreamPlayer
 var music_volume_db: float = -20.0
 var _music_loops: bool = false
 
+var master_volume: float = 1.0:
+	set(v):
+		master_volume = v
+		var bus_idx = AudioServer.get_bus_index("Master")
+		AudioServer.set_bus_volume_db(bus_idx, linear_to_db(v))
+		_save_config()
+
 func _ready():
 	process_mode = Node.PROCESS_MODE_ALWAYS
 
@@ -33,10 +40,31 @@ func _ready():
 		add_child(player)
 		audio_players.append(player)
 
+	_load_config()
+
+func _load_config():
+	var cfg = ConfigFile.new()
+	var err = cfg.load("user://settings.cfg")
+	if err == OK:
+		var v = cfg.get_value("audio", "master_volume", 1.0)
+		master_volume = v
+	else:
+		master_volume = 1.0
+
+func _save_config():
+	var cfg = ConfigFile.new()
+	cfg.set_value("audio", "master_volume", master_volume)
+	cfg.save("user://settings.cfg")
+
+func set_master_volume(value: float):
+	master_volume = value
+
 func play_music(key: String, volume_db: float = music_volume_db):
 	_music_loops = key != "victory"
 	var path: String
 	match key:
+		"title":
+			path = "res://assets/music/xDeviruchi - Title Theme (Loop).wav"
 		"main":
 			path = "res://assets/music/xDeviruchi - Mysterious Dungeon.wav"
 		"boss":
@@ -45,7 +73,12 @@ func play_music(key: String, volume_db: float = music_volume_db):
 			path = "res://assets/music/xDeviruchi - Decisive Battle (End).wav"
 		_:
 			return
-	bgm_player.stream = load(path)
+	var stream = load(path)
+	if stream is AudioStreamWAV and key == "title":
+		stream.loop_mode = AudioStreamWAV.LOOP_FORWARD
+		stream.loop_begin = 0
+		stream.loop_end = 5318460
+	bgm_player.stream = stream
 	bgm_player.volume_db = volume_db
 	bgm_player.play()
 
