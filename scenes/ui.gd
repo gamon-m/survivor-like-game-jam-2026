@@ -37,7 +37,9 @@ extends CanvasLayer
 @onready var back_button: Button = $ReplaceCompanionPanel/VBoxContainer/BackButton
 
 @onready var pause_overlay: ColorRect = $PauseOverlay
+@onready var time_label: Label = $TimeLabel
 
+var _elapsed_time: float = 0.0
 var _pause_index := 0
 var _character_callable: Callable
 var _stat_callable: Callable
@@ -99,9 +101,9 @@ func _setup_font():
 	font.font_data = load("res://assets/monogram.ttf")
 	var custom_theme = Theme.new()
 	custom_theme.default_font = font
-	custom_theme.default_font_size = 20
-	custom_theme.set_font_size("font_size", "Label", 20)
-	custom_theme.set_font_size("font_size", "Button", 20)
+	custom_theme.default_font_size = 36
+	custom_theme.set_font_size("font_size", "Label", 36)
+	custom_theme.set_font_size("font_size", "Button", 36)
 	for child in get_children():
 		if child is Control:
 			child.theme = custom_theme
@@ -122,6 +124,27 @@ func _ready() -> void:
 	player.connect("leveled_up", _on_player_leveled_up)
 	player.connect("health_changed", _on_player_health_changed)
 	pause_overlay.visible = false
+
+func _process(delta):
+	if not get_tree().paused:
+		_elapsed_time += delta
+	time_label.text = _format_time(_elapsed_time)
+
+func _format_time(secs: float) -> String:
+	var m = int(secs) / 60
+	var s = int(secs) % 60
+	return "%02d:%02d" % [m, s]
+
+func save_best_time_on_win():
+	_save_best_time()
+
+func _save_best_time():
+	var cfg = ConfigFile.new()
+	cfg.load("user://settings.cfg")
+	var best = cfg.get_value("game", "best_time", INF)
+	if _elapsed_time < best:
+		cfg.set_value("game", "best_time", _elapsed_time)
+		cfg.save("user://settings.cfg")
 
 func _input(event):
 	if pause_overlay.visible:

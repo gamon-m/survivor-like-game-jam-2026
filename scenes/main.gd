@@ -44,6 +44,7 @@ func _start_boss_fight():
 
 func _on_boss_died():
 	ui.hide_boss_hp()
+	ui.save_best_time_on_win()
 	for enemy in enemies_container.get_children():
 		enemy.queue_free()
 	AudioManager.play_music("victory")

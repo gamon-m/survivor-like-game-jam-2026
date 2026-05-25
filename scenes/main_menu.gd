@@ -15,9 +15,9 @@ func _setup_theme():
 
 	var custom_theme = Theme.new()
 	custom_theme.default_font = font
-	custom_theme.default_font_size = 24
-	custom_theme.set_font_size("font_size", "Label", 24)
-	custom_theme.set_font_size("font_size", "Button", 24)
+	custom_theme.default_font_size = 28
+	custom_theme.set_font_size("font_size", "Label", 28)
+	custom_theme.set_font_size("font_size", "Button", 28)
 	theme = custom_theme
 
 	$VBoxContainer/Title.add_theme_font_size_override("font_size", 56)
@@ -25,6 +25,14 @@ func _setup_theme():
 
 	$SettingsPanel/VBox/VBox/VolumeContainer/VolumeSlider.value = AudioManager.master_volume * 100.0
 	$SettingsPanel/VBox/VBox/VolumeContainer/VolumeValue.text = "%d%%" % (AudioManager.master_volume * 100.0)
+
+	var cfg = ConfigFile.new()
+	cfg.load("user://settings.cfg")
+	var best = cfg.get_value("game", "best_time", -1.0)
+	if best > 0:
+		var m = int(best) / 60
+		var s = int(best) % 60
+		$BestTimeLabel.text = "Best: %02d:%02d" % [m, s]
 
 func _input(event):
 	if $SettingsPanel.visible:

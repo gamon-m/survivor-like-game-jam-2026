@@ -7,9 +7,9 @@ func _setup_font():
 	font.font_data = load("res://assets/monogram.ttf")
 	var custom_theme = Theme.new()
 	custom_theme.default_font = font
-	custom_theme.default_font_size = 20
-	custom_theme.set_font_size("font_size", "Label", 20)
-	custom_theme.set_font_size("font_size", "Button", 20)
+	custom_theme.default_font_size = 28
+	custom_theme.set_font_size("font_size", "Label", 28)
+	custom_theme.set_font_size("font_size", "Button", 28)
 	for child in get_children():
 		if child is Control:
 			child.theme = custom_theme

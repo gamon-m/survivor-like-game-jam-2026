@@ -7,7 +7,7 @@
 [ext_resource type="Script" uid="uid://cu4qee8oe4x8b" path="res://scenes/main.gd" id="5_main"]
 [ext_resource type="PackedScene" uid="uid://b8k2m3xv7q4rn" path="res://scenes/game_over.tscn" id="6_gameover"]
 [ext_resource type="PackedScene" uid="uid://442ssqvxh6gb" path="res://scenes/enemies/boss.tscn" id="7_o6xl0"]
-[ext_resource type="PackedScene" path="res://scenes/you_win.tscn" id="youwin"]
+[ext_resource type="PackedScene" uid="uid://dn1b8mjlsnlm3" path="res://scenes/you_win.tscn" id="youwin"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tefeu"]
 bg_color = Color(1, 0, 0, 1)
@@ -56,6 +56,25 @@ text = "Level 0"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="TimeLabel" type="Label" parent="UI" unique_id=1574493738]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -80.0
+offset_top = -70.0
+offset_right = 80.0
+offset_bottom = -30.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+text = "00:00"
+horizontal_alignment = 1
+
 [node name="BossHealthBar" type="ProgressBar" parent="UI" unique_id=1010665576]
 visible = false
 anchors_preset = 10
@@ -76,7 +95,7 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_tefeu")
 
 [node name="LevelUpPanel" type="Panel" parent="UI" unique_id=1623605455]
 visible = false
-custom_minimum_size = Vector2(300, 400)
+custom_minimum_size = Vector2(500, 400)
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -194,8 +213,8 @@ text = "PAUSED"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="UI/PauseOverlay"]
-anchors_preset = 8
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/PauseOverlay" unique_id=334217985]
+layout_mode = 0
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -207,13 +226,13 @@ offset_bottom = 130.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="ResumeButton" type="Button" parent="UI/PauseOverlay/VBoxContainer"]
+[node name="ResumeButton" type="Button" parent="UI/PauseOverlay/VBoxContainer" unique_id=601424436]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 3
 text = "Resume"
 
-[node name="MainMenuButton" type="Button" parent="UI/PauseOverlay/VBoxContainer"]
+[node name="MainMenuButton" type="Button" parent="UI/PauseOverlay/VBoxContainer" unique_id=1241623776]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 3

@@ -53,6 +53,7 @@ func _load_config():
 
 func _save_config():
 	var cfg = ConfigFile.new()
+	cfg.load("user://settings.cfg")
 	cfg.set_value("audio", "master_volume", master_volume)
 	cfg.save("user://settings.cfg")
 
