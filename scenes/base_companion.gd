@@ -31,7 +31,7 @@ func _ready() -> void:
 	match type.to_lower():
 		"bomber":
 			_setup_bomber()
-		"fullauto":
+		"full auto":
 			_setup_fullauto()
 
 
@@ -44,16 +44,26 @@ func _physics_process(delta: float) -> void:
 	else:
 		_process_lerp_movement(delta)
 
+	if velocity.length_squared() > 1.0:
+		if $AnimationPlayer.current_animation != "run":
+			$AnimationPlayer.play("run")
+	else:
+		if $AnimationPlayer.current_animation != "idle":
+			$AnimationPlayer.play("idle")
+
 
 func _process_lerp_movement(delta):
 	var direction = global_position.direction_to(follow_target.global_position)
 	var target_position = follow_target.global_position - (direction * follow_distance)
-	global_position = global_position.lerp(target_position, delta * follow_speed)
+	var new_pos = global_position.lerp(target_position, delta * follow_speed)
+	velocity = (new_pos - global_position) / delta
+	global_position = new_pos
 
 func _process_orbit_movement(delta):
 	orbit_angle += delta * orbit_speed
-	var offset = Vector2(cos(orbit_angle), sin(orbit_angle)) * follow_distance * 2
-	global_position = follow_target.global_position + offset
+	var new_pos = follow_target.global_position + Vector2(cos(orbit_angle), sin(orbit_angle)) * follow_distance * 2
+	velocity = (new_pos - global_position) / delta
+	global_position = new_pos
 
 func _update_stats():
 	damage = player.damage
@@ -61,27 +71,31 @@ func _update_stats():
 	shot_range = player.shot_range
 	if holster:
 		holster.get_node("RangeFinder/Range").shape.radius = shot_range
+		holster.get_node("Timer").wait_time = player.shot_delay
 
 	match type.to_lower():
 		"bomber":
 			_apply_bomber_stats()
-		"fullauto":
+		"full auto":
 			_apply_fullauto_stats()
 
 func _apply_bomber_stats():
 	shot_range = player.shot_range / 2
 	if holster:
 		holster.get_node("RangeFinder/Range").shape.radius = shot_range
+		holster.get_node("Timer").wait_time = 2.0
 
 func _apply_fullauto_stats():
-	damage = player.damage / 2
+	damage = player.damage * 0.25
+	if holster:
+		holster.get_node("Timer").wait_time = player.shot_delay * 0.25
 
 func _setup_bomber():
 	holster.scene = preload("res://scenes/projectiles/bomber_projectile.tscn")
 	holster.get_node("Timer").wait_time = 2.0
 
 func _setup_fullauto():
-	pass
+	holster.scene = preload("res://scenes/projectiles/fullauto_projectile.tscn")
 
 func _setup_meatshield():
 	follow_target = player

@@ -1,6 +1,6 @@
-[gd_scene format=3 uid="uid://n7vm5rbjgf8x"]
+[gd_scene format=3 uid="uid://j78uxiybdxlg"]
 
-[ext_resource type="Script" uid="uid://cw1ki83vdsxet" path="res://scenes/projectile.gd" id="1_c8fcr"]
+[ext_resource type="Script" uid="uid://cw1ki83vdsxet" path="res://scenes/projectile.gd" id="1_3u70a"]
 
 [sub_resource type="Gradient" id="Gradient_6aapk"]
 interpolation_mode = 1
@@ -8,24 +8,24 @@ colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_c8fcr"]
 gradient = SubResource("Gradient_6aapk")
-width = 12
-height = 12
+width = 8
+height = 8
 fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.5, 0.03)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_6aapk"]
-radius = 6.0
+radius = 4.0
 
-[node name="Projectile" type="Area2D" unique_id=497655628]
+[node name="FullAutoProjectile" type="Area2D" unique_id=538524782]
 collision_layer = 0
 collision_mask = 6
-script = ExtResource("1_c8fcr")
+script = ExtResource("1_3u70a")
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1819673217]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1563205026]
 texture = SubResource("GradientTexture2D_c8fcr")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=119957857]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=299507240]
 shape = SubResource("CircleShape2D_6aapk")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
